@@ -1,0 +1,6 @@
+{
+  "name": "bildr-hub-identity",
+  "version": "1.0.0",
+  "author": { "name": "bildr.hub" },
+  "skills": "./skills"
+}

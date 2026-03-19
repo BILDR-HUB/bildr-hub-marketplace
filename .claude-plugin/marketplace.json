@@ -14,7 +14,7 @@
       "description": "Create distinctive, premium-quality frontend interfaces with OKLCH color system, typography guidance, theme archetypes, and AI slop detection.",
       "version": "1.0.0",
       "author": { "name": "bildr.hub" },
-      "source": "./",
+      "source": "./plugins/frontend-design",
       "category": "design",
       "tags": ["design", "frontend", "ui", "ux"]
     },
@@ -23,7 +23,7 @@
       "description": "bildr.hub brand identity — dual-mode design system, document templates (quotes, contracts), typography, and communication tone guide.",
       "version": "1.0.0",
       "author": { "name": "bildr.hub" },
-      "source": "./",
+      "source": "./plugins/bildr-hub-identity",
       "category": "design",
       "tags": ["brand", "design", "documents", "templates"]
     },
@@ -32,7 +32,7 @@
       "description": "Manage the bildr.hub public knowledge base — create, update, and organize dev notes with consistent structure and formatting.",
       "version": "1.0.0",
       "author": { "name": "bildr.hub" },
-      "source": "./",
+      "source": "./plugins/bildr-learn",
       "category": "productivity",
       "tags": ["knowledge-base", "documentation", "notes"]
     },
@@ -41,7 +41,7 @@
       "description": "Security review checklist for web APIs — IDOR, XSS, input validation, RLS, token flows, auth enforcement. Use when writing or reviewing API endpoints.",
       "version": "1.0.0",
       "author": { "name": "bildr.hub" },
-      "source": "./",
+      "source": "./plugins/security-review",
       "category": "security",
       "tags": ["security", "review", "api", "auth", "backend"]
     },
@@ -50,7 +50,7 @@
       "description": "Backend best practices for Drizzle ORM, SQLite/D1, query optimization, tRPC, Hono, and Cloudflare Workers.",
       "version": "1.0.0",
       "author": { "name": "bildr.hub" },
-      "source": "./",
+      "source": "./plugins/backend-patterns",
       "category": "backend",
       "tags": ["drizzle", "d1", "sqlite", "trpc", "hono", "cloudflare", "backend"]
     },
@@ -59,7 +59,7 @@
       "description": "React frontend best practices — hooks ordering, state sync, optimistic UI, performance, and common pitfalls from production bugs.",
       "version": "1.0.0",
       "author": { "name": "bildr.hub" },
-      "source": "./",
+      "source": "./plugins/react-patterns",
       "category": "frontend",
       "tags": ["react", "hooks", "frontend", "performance", "ui"]
     }
