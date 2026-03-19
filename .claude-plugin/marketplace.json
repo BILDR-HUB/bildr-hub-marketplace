@@ -1,0 +1,67 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "bildr-hub-marketplace",
+  "metadata": {
+    "description": "bildr.hub plugin marketplace — curated skills for Claude Code. Design, security, backend patterns, React, brand identity, and knowledge base management."
+  },
+  "owner": {
+    "name": "bildr.hub",
+    "email": "hello@bildr.hu"
+  },
+  "plugins": [
+    {
+      "name": "frontend-design",
+      "description": "Create distinctive, premium-quality frontend interfaces with OKLCH color system, typography guidance, theme archetypes, and AI slop detection.",
+      "version": "1.0.0",
+      "author": { "name": "bildr.hub" },
+      "source": "./",
+      "category": "design",
+      "tags": ["design", "frontend", "ui", "ux"]
+    },
+    {
+      "name": "bildr-hub-identity",
+      "description": "bildr.hub brand identity — dual-mode design system, document templates (quotes, contracts), typography, and communication tone guide.",
+      "version": "1.0.0",
+      "author": { "name": "bildr.hub" },
+      "source": "./",
+      "category": "design",
+      "tags": ["brand", "design", "documents", "templates"]
+    },
+    {
+      "name": "bildr-learn",
+      "description": "Manage the bildr.hub public knowledge base — create, update, and organize dev notes with consistent structure and formatting.",
+      "version": "1.0.0",
+      "author": { "name": "bildr.hub" },
+      "source": "./",
+      "category": "productivity",
+      "tags": ["knowledge-base", "documentation", "notes"]
+    },
+    {
+      "name": "security-review",
+      "description": "Security review checklist for web APIs — IDOR, XSS, input validation, RLS, token flows, auth enforcement. Use when writing or reviewing API endpoints.",
+      "version": "1.0.0",
+      "author": { "name": "bildr.hub" },
+      "source": "./",
+      "category": "security",
+      "tags": ["security", "review", "api", "auth", "backend"]
+    },
+    {
+      "name": "backend-patterns",
+      "description": "Backend best practices for Drizzle ORM, SQLite/D1, query optimization, tRPC, Hono, and Cloudflare Workers.",
+      "version": "1.0.0",
+      "author": { "name": "bildr.hub" },
+      "source": "./",
+      "category": "backend",
+      "tags": ["drizzle", "d1", "sqlite", "trpc", "hono", "cloudflare", "backend"]
+    },
+    {
+      "name": "react-patterns",
+      "description": "React frontend best practices — hooks ordering, state sync, optimistic UI, performance, and common pitfalls from production bugs.",
+      "version": "1.0.0",
+      "author": { "name": "bildr.hub" },
+      "source": "./",
+      "category": "frontend",
+      "tags": ["react", "hooks", "frontend", "performance", "ui"]
+    }
+  ]
+}

@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>bildr.hub - Árajánlat</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bungee&family=JetBrains+Mono:wght@400;700&family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* ================================================================
+       BILDR.HUB A4 QUOTE TEMPLATE
+       Self-contained HTML for Playwright PDF generation.
+
+       PDF generation:
+         1. Serve via local HTTP server (Playwright blocks file://)
+         2. Navigate to URL
+         3. page.pdf({ format: 'A4', printBackground: true,
+              margin: { top: '24mm', right: '22mm', bottom: '28mm', left: '22mm' } })
+
+       The template uses a FLOW-BASED layout:
+         - Screen mode: .page div provides visual A4 preview
+         - Print/PDF mode: .page becomes transparent, content flows
+           naturally across pages. Margins come from Playwright's
+           page.pdf() margin parameter, NOT from CSS padding.
+       ================================================================ */
+
+    /* --- Reset & Base --- */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      /* Earth palette (light, print-friendly) */
+      --color-text: #3d2814;
+      --color-text-2: #6b4423;
+      --color-text-3: #8b6144;
+      --color-accent: #a8763e;
+      --color-accent-dark: #7a5a2e;
+      --color-accent-light: #e8d5b8;
+      --color-border: #d4c5b5;
+      --color-border-light: #ece5dc;
+      --color-stripe: #fdfbf8;
+      --color-bg: #f5f0eb;
+      --font-display: "Bungee", sans-serif;
+      --font-body: "Plus Jakarta Sans", -apple-system, sans-serif;
+      --font-mono: "JetBrains Mono", "SF Mono", monospace;
+    }
+
+    html {
+      font-size: 12px;
+    }
+
+    body {
+      font-family: var(--font-body);
+      color: var(--color-text);
+      line-height: 1.7;
+      background: #e8e0d6;
+    }
+
+    a {
+      color: var(--color-text-2);
+      text-decoration: underline;
+    }
+
+    a:hover {
+      color: var(--color-text);
+    }
+
+    /* --- A4 Page Container (screen preview only) --- */
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      margin: 20px auto;
+      padding: 24mm 22mm 28mm 22mm;
+      background: #fff;
+      box-shadow: 0 2px 16px rgba(61, 40, 20, 0.12);
+      position: relative;
+    }
+
+    /* --- Header --- */
+    .doc-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding-bottom: 20px;
+      border-bottom: 2px solid var(--color-text);
+      margin-bottom: 32px;
+    }
+
+    .doc-header-left {
+      display: flex;
+      align-items: center;
+      gap: 0;
+    }
+
+    .doc-header-brand {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--color-text);
+    }
+
+    .doc-header-brand .accent {
+      color: var(--color-accent);
+    }
+
+    .doc-header-right {
+      text-align: right;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--color-text-2);
+      line-height: 1.8;
+    }
+
+    .doc-header-right a {
+      color: var(--color-text-2);
+      text-decoration: none;
+    }
+
+    .doc-header-right a:hover {
+      color: var(--color-text);
+    }
+
+    /* --- Document Meta (title, date, number) --- */
+    .doc-meta {
+      margin-bottom: 36px;
+    }
+
+    .doc-type {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--color-text-2);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin-bottom: 8px;
+    }
+
+    .doc-title {
+      font-family: var(--font-display);
+      font-size: 28px;
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      line-height: 1.2;
+      margin-bottom: 16px;
+      color: var(--color-text);
+    }
+
+    .doc-info-row {
+      display: flex;
+      gap: 40px;
+      font-size: 12px;
+      color: var(--color-text-2);
+    }
+
+    .doc-info-row strong {
+      font-weight: 600;
+      color: var(--color-text);
+    }
+
+    /* --- Parties (from / to) --- */
+    .doc-parties {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      margin-bottom: 36px;
+      padding: 20px 24px;
+      background: var(--color-stripe);
+      border-radius: 8px;
+      border: 1px solid var(--color-border-light);
+    }
+
+    .doc-party-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--color-text);
+      margin-bottom: 10px;
+    }
+
+    .doc-party-name {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .doc-party-details {
+      font-size: 12px;
+      color: var(--color-text-2);
+      line-height: 1.8;
+    }
+
+    /* --- Section Headings --- */
+    .doc-section {
+      margin-top: 28px;
+      margin-bottom: 16px;
+      padding-left: 14px;
+      border-left: 3px solid var(--color-accent);
+    }
+
+    .doc-section h2 {
+      font-family: var(--font-body);
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+      color: var(--color-text);
+    }
+
+    .doc-section-num {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--color-text-3);
+      margin-right: 8px;
+    }
+
+    /* --- Body Content --- */
+    .doc-body p {
+      margin-bottom: 12px;
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    .doc-body ul, .doc-body ol {
+      margin: 8px 0 12px 20px;
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    .doc-body li {
+      margin-bottom: 4px;
+    }
+
+    .doc-body strong {
+      font-weight: 600;
+    }
+
+    .doc-body em {
+      font-style: italic;
+    }
+
+    /* --- Tables --- */
+    .doc-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0 24px 0;
+      font-size: 12px;
+    }
+
+    .doc-table thead th {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      text-align: left;
+      padding: 10px 14px;
+      background: var(--color-text);
+      color: #f5f0eb;
+    }
+
+    .doc-table thead th:first-child {
+      border-radius: 6px 0 0 0;
+    }
+
+    .doc-table thead th:last-child {
+      border-radius: 0 6px 0 0;
+    }
+
+    .doc-table tbody td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--color-border-light);
+      vertical-align: top;
+    }
+
+    .doc-table tbody tr:nth-child(even) {
+      background: var(--color-stripe);
+    }
+
+    .doc-table tbody tr:last-child td {
+      border-bottom: 2px solid var(--color-border);
+    }
+
+    .doc-table .text-right {
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .doc-table .text-bold {
+      font-weight: 600;
+    }
+
+    /* --- Total / Summary Row --- */
+    .doc-total-row {
+      display: flex;
+      justify-content: flex-end;
+      padding: 16px 0;
+      margin-top: -8px;
+      margin-bottom: 24px;
+    }
+
+    .doc-total-box {
+      background: transparent;
+      border-top: 2px solid var(--color-accent);
+      border-radius: 0;
+      padding: 14px 24px 14px 0;
+      text-align: right;
+    }
+
+    .doc-total-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--color-text-2);
+      margin-bottom: 4px;
+    }
+
+    .doc-total-amount {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--color-text);
+    }
+
+    /* --- Highlight Box (terms, notes) --- */
+    .doc-highlight {
+      background: transparent;
+      border-left: 3px solid var(--color-accent);
+      border-radius: 0;
+      padding: 16px 20px;
+      margin: 20px 0;
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    .doc-highlight strong {
+      font-weight: 600;
+      color: var(--color-text);
+    }
+
+    /* --- Signature Blocks --- */
+    .doc-signatures {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      margin-top: 48px;
+      padding-top: 24px;
+    }
+
+    .doc-signature-block {
+      border-top: 1px solid var(--color-border);
+      padding-top: 16px;
+    }
+
+    .doc-signature-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--color-text-3);
+      margin-bottom: 40px;
+    }
+
+    .doc-signature-line {
+      border-bottom: 1px solid var(--color-text);
+      margin-bottom: 8px;
+      height: 1px;
+    }
+
+    .doc-signature-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--color-text);
+      margin-bottom: 2px;
+    }
+
+    .doc-signature-role {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--color-text-2);
+      letter-spacing: 0.05em;
+    }
+
+    /* --- Accept Section (web interactive, hidden in print) --- */
+    .doc-accept {
+      margin-top: 32px;
+      padding: 24px;
+      background: var(--color-stripe);
+      border: 1px solid var(--color-border-light);
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    .doc-accept-title {
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 400;
+      text-transform: uppercase;
+      color: var(--color-text);
+      margin-bottom: 8px;
+    }
+
+    .doc-accept-desc {
+      font-size: 12px;
+      color: var(--color-text-2);
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+
+    .doc-accept-btn {
+      display: inline-block;
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      background: var(--color-accent);
+      color: #fff;
+      padding: 14px 40px;
+      border-radius: 8px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .doc-accept-btn:hover {
+      background: var(--color-accent-dark);
+      box-shadow: 0 4px 12px rgba(168, 118, 62, 0.3);
+      transform: translateY(-1px);
+    }
+
+    /* --- Footer --- */
+    .doc-footer {
+      margin-top: 48px;
+      padding-top: 16px;
+      border-top: 1px solid var(--color-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .doc-footer-links {
+      display: flex;
+      gap: 24px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+    }
+
+    .doc-footer-links a {
+      color: var(--color-text-2);
+      text-decoration: underline;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .doc-footer-links a:hover {
+      color: var(--color-text);
+    }
+
+    .doc-footer-page {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--color-text-3);
+    }
+
+    /* --- Divider --- */
+    .doc-divider {
+      border: none;
+      border-top: 1px solid var(--color-border-light);
+      margin: 24px 0;
+    }
+
+    /* --- Page Break --- */
+    .page-break {
+      page-break-before: always;
+    }
+
+    /* ================================================================
+       PRINT / PDF STYLES
+       Two generation methods supported:
+       1. window.print() — browser native "Save as PDF". @page margins
+          control per-page spacing. Most reliable for client-side use.
+       2. Playwright page.pdf() — server-side. Pass margins in page.pdf()
+          parameter (overrides @page). Use printBackground: true.
+       ================================================================ */
+    @media print {
+      html {
+        font-size: 12px;
+      }
+
+      body {
+        background: #fff;
+        margin: 0;
+        padding: 0;
+      }
+
+      .page {
+        width: auto;
+        min-height: auto;
+        margin: 0;
+        padding: 0;
+        box-shadow: none;
+      }
+
+      @page {
+        size: A4;
+        margin: 24mm 22mm 28mm 22mm;
+      }
+
+      /* Hide interactive accept section in print */
+      .doc-accept {
+        display: none;
+      }
+
+      /* Avoid breaking inside key elements */
+      .doc-parties,
+      .doc-signatures,
+      .doc-signature-block,
+      .doc-highlight,
+      .doc-table thead {
+        page-break-inside: avoid;
+      }
+
+      .doc-section {
+        page-break-after: avoid;
+      }
+
+      .doc-table tr {
+        page-break-inside: avoid;
+      }
+
+      .doc-footer {
+        page-break-inside: avoid;
+      }
+
+      .doc-total-row {
+        page-break-inside: avoid;
+      }
+
+      a[href^="http"]::after,
+      a[href^="mailto"]::after {
+        content: none;
+      }
+    }
+
+    /* ================================================================
+       SCREEN PREVIEW
+       ================================================================ */
+    @media screen {
+      body {
+        padding: 40px 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ============================================================
+     DOCUMENT CONTENT
+     Single .page div — screen preview shows it as A4 card,
+     print/PDF mode removes the container and content flows freely.
+     ============================================================ -->
+<div class="page">
+
+  <!-- HEADER — Brand logotype + contact -->
+  <div class="doc-header">
+    <div class="doc-header-left">
+      <span class="doc-header-brand">BILDR<span class="accent">.HUB</span></span>
+    </div>
+    <div class="doc-header-right">
+      <a href="https://bildr.hu">bildr.hu</a><br>
+      <a href="mailto:ai@bildr.hu">ai@bildr.hu</a>
+    </div>
+  </div>
+
+  <!-- DOCUMENT META -->
+  <div class="doc-meta">
+    <div class="doc-type">Árajánlat</div>
+    <h1 class="doc-title">Dokumentum címe ide</h1>
+    <div class="doc-info-row">
+      <span><strong>Dátum:</strong> 2026. március 1.</span>
+      <span><strong>Azonosító:</strong> BH-2026-001</span>
+      <span><strong>Érvényes:</strong> 30 napig</span>
+    </div>
+  </div>
+
+  <!-- PARTIES (From / To) -->
+  <div class="doc-parties">
+    <div>
+      <div class="doc-party-label">Szolgáltató</div>
+      <div class="doc-party-name">BILDR HUB Kft.</div>
+      <div class="doc-party-details">
+        bildr.hub<br>
+        ai@bildr.hu<br>
+        Adószám: XXXXXXXX-X-XX
+      </div>
+    </div>
+    <div>
+      <div class="doc-party-label">Megrendelő</div>
+      <div class="doc-party-name">Ügyfél Kft.</div>
+      <div class="doc-party-details">
+        Kapcsolattartó: Kiss Péter<br>
+        info@ugyfelpelda.hu<br>
+        Adószám: XXXXXXXX-X-XX
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION: Scope -->
+  <div class="doc-section">
+    <h2><span class="doc-section-num">01</span>Projekt leírása</h2>
+  </div>
+  <div class="doc-body">
+    <p>
+      A projekt célja egy automatizált rendeléskezelő rendszer kiépítése,
+      amely összeköti a meglévő webshop platformot az ügyfélkezelő rendszerrel.
+      A megoldás n8n workflow-kra épül, valós idejű szinkronizációval.
+    </p>
+    <p>
+      A rendszer a következő funkciókat tartalmazza:
+    </p>
+    <ul>
+      <li>Rendelés fogadása és feldolgozása</li>
+      <li>Automatikus számlakiállítás</li>
+      <li>Készletszinkronizáció</li>
+      <li>Ügyfél értesítések (email és Slack)</li>
+    </ul>
+  </div>
+
+  <!-- SECTION: Pricing Table -->
+  <div class="doc-section">
+    <h2><span class="doc-section-num">02</span>Árazás</h2>
+  </div>
+  <div class="doc-body">
+    <table class="doc-table">
+      <thead>
+        <tr>
+          <th>Tétel</th>
+          <th>Leírás</th>
+          <th class="text-right">Összeg</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="text-bold">Felmérés és tervezés</td>
+          <td>Rendszerterv, workflow design, integrációs terv</td>
+          <td class="text-right">150 000 Ft</td>
+        </tr>
+        <tr>
+          <td class="text-bold">Fejlesztés</td>
+          <td>n8n workflow-k, API integrációk, tesztelés</td>
+          <td class="text-right">350 000 Ft</td>
+        </tr>
+        <tr>
+          <td class="text-bold">Bevezetés és betanítás</td>
+          <td>Élesítés, 2 órás betanítás, dokumentáció</td>
+          <td class="text-right">100 000 Ft</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="doc-total-row">
+      <div class="doc-total-box">
+        <div class="doc-total-label">Összesen (nettó)</div>
+        <div class="doc-total-amount">600 000 Ft</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HIGHLIGHT: Payment terms -->
+  <div class="doc-highlight">
+    <strong>Fizetési feltételek:</strong> 50% előleg a megrendeléskor, 50% az átadáskor.
+    Fizetési határidő: 8 munkanap. Átutalással, a számlán feltüntetett bankszámlaszámra.
+  </div>
+
+  <!-- SECTION: Timeline -->
+  <div class="doc-section">
+    <h2><span class="doc-section-num">03</span>Ütemezés</h2>
+  </div>
+  <div class="doc-body">
+    <table class="doc-table">
+      <thead>
+        <tr>
+          <th>Hét</th>
+          <th>Feladat</th>
+          <th>Mérföldkő</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="text-bold">1. hét</td>
+          <td>Felmérés, rendszerterv, workflow design</td>
+          <td>Rendszerterv elfogadása</td>
+        </tr>
+        <tr>
+          <td class="text-bold">2-3. hét</td>
+          <td>Fejlesztés, integrációk, tesztelés</td>
+          <td>Működő teszt környezet</td>
+        </tr>
+        <tr>
+          <td class="text-bold">4. hét</td>
+          <td>Élesítés, betanítás, dokumentáció</td>
+          <td>Átadás és betanítás</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr class="doc-divider">
+
+  <!-- SIGNATURES — Two blocks -->
+  <div class="doc-signatures">
+    <div class="doc-signature-block">
+      <div class="doc-signature-label">Szolgáltató</div>
+      <div class="doc-signature-line"></div>
+      <div class="doc-signature-name">Név Placeholder</div>
+      <div class="doc-signature-role">BILDR HUB Kft.</div>
+    </div>
+    <div class="doc-signature-block">
+      <div class="doc-signature-label">Megrendelő</div>
+      <div class="doc-signature-line"></div>
+      <div class="doc-signature-name">Kiss Péter</div>
+      <div class="doc-signature-role">Ügyfél Kft.</div>
+    </div>
+  </div>
+
+  <!-- ACCEPT SECTION (web interactive only, hidden in print) -->
+  <div class="doc-accept">
+    <div class="doc-accept-title">Ajánlat elfogadása</div>
+    <div class="doc-accept-desc">
+      Az "Elfogadom" gombra kattintva jelzed, hogy az ajánlatot elfogadod
+      a fenti feltételek szerint. Ezután felvesszük veled a kapcsolatot a következő lépésekről.
+    </div>
+    <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+      <button class="doc-accept-btn" onclick="handleAccept()">ELFOGADOM</button>
+      <button class="doc-accept-btn" onclick="window.print()" style="background: transparent; border: 1px solid var(--color-border); color: var(--color-text-2);" onmouseover="this.style.borderColor='var(--color-accent)';this.style.color='var(--color-accent)'" onmouseout="this.style.borderColor='var(--color-border)';this.style.color='var(--color-text-2)'">PDF LETÖLTÉS</button>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="doc-footer">
+    <div class="doc-footer-links">
+      <a href="https://bildr.hu">bildr.hu</a>
+      <a href="mailto:ai@bildr.hu">ai@bildr.hu</a>
+    </div>
+    <div class="doc-footer-page">1 / 1</div>
+  </div>
+
+</div>
+
+<script>
+  // Extract slug/uid from URL: /slug/uid
+  function getOfferParams() {
+    const parts = window.location.pathname.split('/').filter(Boolean);
+    if (parts.length >= 2) return { slug: parts[0], uid: parts[1] };
+    return null;
+  }
+
+  function getApiBase() {
+    return window.location.origin;
+  }
+
+  // Show accepted state on the button
+  function showAccepted(acceptedAt) {
+    const btn = document.querySelector('.doc-accept-btn');
+    btn.textContent = 'ELFOGADVA';
+    btn.style.background = '#16a34a';
+    btn.style.cursor = 'default';
+    btn.disabled = true;
+    btn.onclick = null;
+    if (acceptedAt) {
+      const date = new Date(acceptedAt);
+      const desc = document.querySelector('.doc-accept-desc');
+      desc.textContent = `Elfogadva: ${date.toLocaleDateString('hu-HU', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' })}`;
+    }
+  }
+
+  // Show error state on the button
+  function showError() {
+    const btn = document.querySelector('.doc-accept-btn');
+    btn.textContent = 'HIBA - PRÓBÁLD ÚJRA';
+    btn.style.background = '#dc2626';
+    btn.disabled = false;
+  }
+
+  // Check status on page load
+  async function checkStatus() {
+    const params = getOfferParams();
+    if (!params) return;
+    try {
+      const res = await fetch(`${getApiBase()}/api/status/${params.slug}/${params.uid}`);
+      if (!res.ok) return;
+      const data = await res.json();
+      if (data.status === 'accepted') showAccepted(data.acceptedAt);
+    } catch {}
+  }
+
+  // Handle accept button click
+  async function handleAccept() {
+    const params = getOfferParams();
+    if (!params) return;
+
+    const btn = document.querySelector('.doc-accept-btn');
+    btn.textContent = 'KÜLDÉS...';
+    btn.disabled = true;
+    btn.style.opacity = '0.7';
+
+    try {
+      const res = await fetch(`${getApiBase()}/api/accept/${params.slug}/${params.uid}`, {
+        method: 'POST',
+      });
+      const data = await res.json();
+
+      if (res.ok && data.success) {
+        showAccepted(data.acceptedAt);
+      } else if (res.status === 409) {
+        showAccepted(data.acceptedAt);
+      } else {
+        showError();
+      }
+    } catch {
+      showError();
+    }
+  }
+
+  // Check status on page load
+  document.addEventListener('DOMContentLoaded', checkStatus);
+</script>
+
+</body>
+</html>
+

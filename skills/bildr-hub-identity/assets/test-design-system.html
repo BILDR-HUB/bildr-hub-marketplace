@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>bildr.hub Design System Test</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bungee&family=JetBrains+Mono:wght@400;700&family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="bildr-tokens.css">
+  <style>
+    /* Test page specific styles */
+    .test-section {
+      padding: 60px 0;
+      border-bottom: 1px solid var(--color-border);
+    }
+    .test-section:last-child { border-bottom: none; }
+    .test-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--color-accent);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+      display: block;
+    }
+    .color-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 12px;
+    }
+    .color-swatch {
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--color-border);
+    }
+    .color-swatch-preview {
+      height: 64px;
+    }
+    .color-swatch-info {
+      padding: 8px 10px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--color-text-2);
+      background: var(--color-card);
+    }
+    .color-swatch-info strong {
+      display: block;
+      color: var(--color-text);
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+    .type-sample { margin-bottom: 20px; }
+    .flex-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    @media (max-width: 768px) { .grid-2 { grid-template-columns: 1fr; } }
+    .mode-toggle {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      z-index: 9999;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      padding: 10px 20px;
+      border-radius: 8px;
+      border: 1px solid var(--color-border);
+      background: var(--color-card);
+      color: var(--color-text);
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .mode-toggle:hover {
+      border-color: var(--color-accent);
+      color: var(--color-accent);
+    }
+    .career-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      border: 1px solid var(--color-border);
+    }
+  </style>
+</head>
+<body>
+
+<button class="mode-toggle" onclick="document.documentElement.classList.toggle('dark'); this.textContent = document.documentElement.classList.contains('dark') ? 'SWITCH TO LIGHT' : 'SWITCH TO DARK'">SWITCH TO DARK</button>
+
+<div class="wrap">
+
+  <!-- HERO SECTION -->
+  <section class="test-section" style="padding-top: 80px;">
+    <div class="hero-gradient" style="padding: 60px 40px; border-radius: 16px; text-align: center; margin-bottom: 24px;">
+      <p class="section-mono">bildr.hub design system</p>
+      <h1 style="font-family: var(--font-display); font-size: clamp(44px, 5.5vw, 72px); text-transform: uppercase; letter-spacing: -1px; line-height: 1.1; color: var(--color-text); margin-bottom: 16px;">
+        BUILD. LEARN. <span style="color: var(--color-accent);">GROW.</span>
+      </h1>
+      <p style="font-family: var(--font-body); font-size: 18px; color: var(--color-text-2); font-weight: 300; max-width: 600px; margin: 0 auto 32px;">
+        Valódi projektek, valódi fizetés, valódi fejlődés - egy közösségben, ahol a teljesítmény számít.
+      </p>
+      <div class="flex-row" style="justify-content: center;">
+        <a href="#" class="btn-primary">CSATLAKOZZ</a>
+        <a href="#" class="btn-secondary">Nézd meg mit építünk</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- NAVIGATION PREVIEW -->
+  <section class="test-section">
+    <span class="test-label">Navigation Bar</span>
+    <div style="background: color-mix(in oklch, var(--color-bg) 92%, transparent); backdrop-filter: blur(20px); padding: 0 24px; height: 64px; display: flex; align-items: center; justify-content: space-between; border-radius: 12px; border: 1px solid var(--color-border);">
+      <span style="font-family: var(--font-display); font-size: 18px; text-transform: uppercase; color: var(--color-text);">BILDR<span style="color: var(--color-accent);">.HUB</span></span>
+      <div style="display: flex; align-items: center; gap: 24px;">
+        <a href="#" style="font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.04em; color: var(--color-text-3); text-decoration: none;">RÓLUNK</a>
+        <a href="#" style="font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.04em; color: var(--color-text-3); text-decoration: none;">PROJEKTEK</a>
+        <a href="#" style="font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.04em; color: var(--color-text-3); text-decoration: none;">KARRIERÚT</a>
+        <a href="#" class="btn-primary" style="padding: 8px 20px; font-size: 12px; min-height: auto;">CSATLAKOZZ</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- COLORS -->
+  <section class="test-section">
+    <span class="test-label">Color Palette</span>
+    <div class="color-grid">
+      <div class="color-swatch">
+        <div class="color-swatch-preview" style="background: var(--color-bg);"></div>
+        <div class="color-swatch-info"><strong>Background</strong>--color-bg</div>
+      </div>
+      <div class="color-swatch">
+        <div class="color-swatch-preview" style="background: var(--color-card);"></div>
+        <div class="color-swatch-info"><strong>Card</strong>--color-card</div>
+      </div>
+      <div class="color-swatch">
+        <div class="color-swatch-preview" style="background: var(--color-surface);"></div>
+        <div class="color-swatch-info"><strong>Surface</strong>--color-surface</div>
+      </div>
+      <div class="color-swatch">
+        <div class="color-swatch-preview" style="background: var(--color-text);"></div>
+        <div class="color-swatch-info"><strong>Text</strong>--color-text</div>
+      </div>
+      <div class="color-swatch">
+        <div class="color-swatch-preview" style="background: var(--color-text-2);"></div>
+        <div class="color-swatch-info"><strong>Text-2</strong>--color-text-2</div>
+      </div>
+      <div class="color-swatch">
+        <div class="color-swatch-preview" style="background: var(--color-text-3);"></div>
+        <div class="color-swatch-info"><strong>Text-3</strong>--color-text-3</div>
+      </div>
+      <div class="color-swatch">
+        <div class="color-swatch-preview" style="background: var(--color-border);"></div>
+        <div class="color-swatch-info"><strong>Border</strong>--color-border</div>
+      </div>
+      <div class="color-swatch">
+        <div class="color-swatch-preview" style="background: var(--color-primary);"></div>
+        <div class="color-swatch-info"><strong>Primary</strong>--color-primary</div>
+      </div>
+      <div class="color-swatch">
+        <div class="color-swatch-preview" style="background: var(--color-secondary);"></div>
+        <div class="color-swatch-info"><strong>Secondary</strong>--color-secondary</div>
+      </div>
+      <div class="color-swatch">
+        <div class="color-swatch-preview" style="background: var(--color-accent);"></div>
+        <div class="color-swatch-info"><strong>Accent</strong>--color-accent</div>
+      </div>
+      <div class="color-swatch">
+        <div class="color-swatch-preview" style="background: var(--color-accent-dark);"></div>
+        <div class="color-swatch-info"><strong>Accent Dark</strong>--color-accent-dark</div>
+      </div>
+      <div class="color-swatch">
+        <div class="color-swatch-preview" style="background: var(--color-accent-light);"></div>
+        <div class="color-swatch-info"><strong>Accent Light</strong>--color-accent-light</div>
+      </div>
+    </div>
+
+    <span class="test-label" style="margin-top: 32px;">System Colors</span>
+    <div class="color-grid" style="grid-template-columns: repeat(4, 1fr);">
+      <div class="color-swatch">
+        <div class="color-swatch-preview" style="background: var(--color-success);"></div>
+        <div class="color-swatch-info"><strong>Success</strong>#16a34a</div>
+      </div>
+      <div class="color-swatch">
+        <div class="color-swatch-preview" style="background: var(--color-error);"></div>
+        <div class="color-swatch-info"><strong>Error</strong>#dc2626</div>
+      </div>
+      <div class="color-swatch">
+        <div class="color-swatch-preview" style="background: var(--color-warning);"></div>
+        <div class="color-swatch-info"><strong>Warning</strong>#ca8a04</div>
+      </div>
+      <div class="color-swatch">
+        <div class="color-swatch-preview" style="background: var(--color-info);"></div>
+        <div class="color-swatch-info"><strong>Info</strong>#2563eb</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TYPOGRAPHY -->
+  <section class="test-section">
+    <span class="test-label">Typography</span>
+
+    <div class="type-sample">
+      <p style="font-family: var(--font-mono); font-size: 10px; color: var(--color-text-3); margin-bottom: 4px;">Bungee — Display / Always UPPERCASE</p>
+      <h1 style="font-family: var(--font-display); font-size: clamp(44px, 5.5vw, 72px); text-transform: uppercase; letter-spacing: -1px; line-height: 1.1;">ÉPÍTS. TANULJ. <span style="color: var(--color-accent);">NÖVEKEDJ.</span></h1>
+    </div>
+
+    <div class="type-sample">
+      <p style="font-family: var(--font-mono); font-size: 10px; color: var(--color-text-3); margin-bottom: 4px;">Bungee — Section H2</p>
+      <h2 style="font-family: var(--font-display); font-size: clamp(28px, 4vw, 44px); text-transform: uppercase; letter-spacing: -0.5px; line-height: 1.15;">A KÖVETKEZŐ <span style="color: var(--color-accent);">GENERÁCIÓ</span> ÉPÍTI</h2>
+    </div>
+
+    <div class="type-sample">
+      <p style="font-family: var(--font-mono); font-size: 10px; color: var(--color-text-3); margin-bottom: 4px;">Plus Jakarta Sans — H3 (600)</p>
+      <h3 style="font-family: var(--font-body); font-size: 24px; font-weight: 600; letter-spacing: -0.3px;">Valódi projektek, valódi fejlődés</h3>
+    </div>
+
+    <div class="type-sample">
+      <p style="font-family: var(--font-mono); font-size: 10px; color: var(--color-text-3); margin-bottom: 4px;">Plus Jakarta Sans — Body (400)</p>
+      <p style="font-family: var(--font-body); font-size: 17px; font-weight: 400; line-height: 1.7; color: var(--color-text-2); max-width: 680px;">A bildr.hub egy teljesen önálló fejlesztői közösség, akadémia és kollaboratív munkaterület, ahol fiatal tehetségek valódi projekteken dolgoznak valódi ügyfeleknek, teljesítmény alapján lépnek előre, és revenue share-t kapnak.</p>
+    </div>
+
+    <div class="type-sample">
+      <p style="font-family: var(--font-mono); font-size: 10px; color: var(--color-text-3); margin-bottom: 4px;">Plus Jakarta Sans — Light Body (300)</p>
+      <p style="font-family: var(--font-body); font-size: 17px; font-weight: 300; line-height: 1.7; color: var(--color-text-2); max-width: 680px;">Nincs tandíj, nincs diploma - nem vagyunk bootcamp. Valódi fizetés, revenue share, és egy közösség, ahol a teljesítmény számít.</p>
+    </div>
+
+    <div class="type-sample">
+      <p style="font-family: var(--font-mono); font-size: 10px; color: var(--color-text-3); margin-bottom: 4px;">JetBrains Mono — Labels, Badges, Code</p>
+      <p style="font-family: var(--font-mono); font-size: 14px; font-weight: 400; color: var(--color-accent);">const builder = new bildr.hub({ level: "architect" });</p>
+    </div>
+  </section>
+
+  <!-- BUTTONS -->
+  <section class="test-section">
+    <span class="test-label">Buttons</span>
+    <div class="flex-row" style="gap: 16px;">
+      <a href="#" class="btn-primary">CSATLAKOZZ</a>
+      <a href="#" class="btn-primary" style="background: linear-gradient(135deg, #a8763e, #d97706);">OLDJUK MEG</a>
+      <a href="#" class="btn-secondary">Nézd meg mit építünk</a>
+    </div>
+  </section>
+
+  <!-- CARDS -->
+  <section class="test-section">
+    <span class="test-label">Cards</span>
+    <div class="grid-2">
+      <div class="card">
+        <p class="section-mono">Projekt</p>
+        <h3 style="font-family: var(--font-body); font-size: 20px; font-weight: 600; margin-bottom: 8px;">Automatizált rendeléskezelő</h3>
+        <p style="font-family: var(--font-body); font-size: 14px; color: var(--color-text-2); line-height: 1.6;">n8n workflow-kra épülő rendszer, amely összeköti a webshopot az ügyfélkezelővel, valós idejű szinkronizációval.</p>
+      </div>
+      <div class="card">
+        <p class="section-mono">Csapat</p>
+        <h3 style="font-family: var(--font-body); font-size: 20px; font-weight: 600; margin-bottom: 8px;">3 Builder, 1 Architect</h3>
+        <p style="font-family: var(--font-body); font-size: 14px; color: var(--color-text-2); line-height: 1.6;">A csapat 2 hét alatt szállított, a teszt lefedettség 94% felett volt. Revenue share: aktív.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CODE BLOCK -->
+  <section class="test-section">
+    <span class="test-label">Code Block</span>
+    <div class="code-block">
+<span style="color: #fbbf24;">const</span> workflow = <span style="color: #fbbf24;">await</span> n8n.<span style="color: #f59e0b;">createWorkflow</span>({
+  <span style="color: #f59e0b;">name</span>: <span style="color: #e8d5b8;">"Order Processing"</span>,
+  <span style="color: #f59e0b;">trigger</span>: <span style="color: #e8d5b8;">"webhook"</span>,
+  <span style="color: #f59e0b;">nodes</span>: [
+    { <span style="color: #f59e0b;">type</span>: <span style="color: #e8d5b8;">"httpRequest"</span>, <span style="color: #f59e0b;">url</span>: <span style="color: #e8d5b8;">"https://api.bildr.hu/orders"</span> }
+  ]
+});
+<span style="color: #8b6144; font-style: italic;">// Built by the next generation.</span></div>
+  </section>
+
+  <!-- TABLE -->
+  <section class="test-section">
+    <span class="test-label">Table (Striped + Strong Header)</span>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Szint</th>
+          <th>Emoji</th>
+          <th>Hex</th>
+          <th>Leírás</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Newcomer</strong></td>
+          <td>🌱</td>
+          <td style="font-family: var(--font-mono); font-size: 12px;">#f5f0eb</td>
+          <td>Krém</td>
+        </tr>
+        <tr>
+          <td><strong>Brick</strong></td>
+          <td>🧱</td>
+          <td style="font-family: var(--font-mono); font-size: 12px;">#d4c5b5</td>
+          <td>Bézs</td>
+        </tr>
+        <tr>
+          <td><strong>Builder</strong></td>
+          <td>🏗️</td>
+          <td style="font-family: var(--font-mono); font-size: 12px;">#a8763e</td>
+          <td>Aranybarna</td>
+        </tr>
+        <tr>
+          <td><strong>Architect</strong></td>
+          <td>🏛️</td>
+          <td style="font-family: var(--font-mono); font-size: 12px;">#8b6144</td>
+          <td>Középbarna</td>
+        </tr>
+        <tr>
+          <td><strong>Engineer</strong></td>
+          <td>⚙️</td>
+          <td style="font-family: var(--font-mono); font-size: 12px;">#6b4423</td>
+          <td>Sötétbarna</td>
+        </tr>
+        <tr>
+          <td><strong>Mastermind</strong></td>
+          <td>🧠</td>
+          <td style="font-family: var(--font-mono); font-size: 12px;">#d97706</td>
+          <td>Amber</td>
+        </tr>
+        <tr>
+          <td><strong>Mentor</strong></td>
+          <td>🌟</td>
+          <td style="font-family: var(--font-mono); font-size: 12px;">#f59e0b</td>
+          <td>Arany</td>
+        </tr>
+        <tr>
+          <td><strong>Founder</strong></td>
+          <td>🌿</td>
+          <td style="font-family: var(--font-mono); font-size: 12px;">#d62828</td>
+          <td>Piros</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- CAREER BADGES -->
+  <section class="test-section">
+    <span class="test-label">Career Path Badges</span>
+    <div class="flex-row" style="gap: 8px;">
+      <span class="career-badge" style="background: #f5f0eb; color: #3d2814;">🌱 Newcomer</span>
+      <span class="career-badge" style="background: #d4c5b5; color: #3d2814;">🧱 Brick</span>
+      <span class="career-badge" style="background: #a8763e; color: #fff;">🏗️ Builder</span>
+      <span class="career-badge" style="background: #8b6144; color: #fff;">🏛️ Architect</span>
+      <span class="career-badge" style="background: #6b4423; color: #fff;">⚙️ Engineer</span>
+      <span class="career-badge" style="background: #d97706; color: #fff;">🧠 Mastermind</span>
+      <span class="career-badge" style="background: #f59e0b; color: #3d2814;">🌟 Mentor</span>
+      <span class="career-badge" style="background: #d62828; color: #fff;">🌿 Founder</span>
+    </div>
+  </section>
+
+  <!-- DOTTED BACKGROUND -->
+  <section class="test-section">
+    <span class="test-label">Dotted Background Texture</span>
+    <div class="dotted-bg" style="padding: 48px; border-radius: 16px; text-align: center; border: 1px solid var(--color-border);">
+      <h2 style="font-family: var(--font-display); font-size: 28px; text-transform: uppercase; margin-bottom: 12px;">KÖZÖSSÉG <span style="color: var(--color-accent);">EREJE</span></h2>
+      <p style="font-family: var(--font-body); font-size: 16px; color: var(--color-text-2); font-weight: 300;">Subtilis pontozott háttér, ami melegséget ad a szekcióknak.</p>
+    </div>
+  </section>
+
+  <!-- GRADIENT SECTION -->
+  <section class="test-section">
+    <span class="test-label">Gradients</span>
+    <div class="grid-2">
+      <div class="hero-gradient" style="padding: 32px; border-radius: 16px; text-align: center;">
+        <p style="font-family: var(--font-mono); font-size: 10px; color: var(--color-text-3); margin-bottom: 8px;">HERO GRADIENT</p>
+        <p style="font-family: var(--font-display); font-size: 20px; text-transform: uppercase; color: var(--color-text);">BUILD. LEARN. GROW.</p>
+      </div>
+      <div class="cta-gradient" style="padding: 32px; border-radius: 16px; text-align: center;">
+        <p style="font-family: var(--font-mono); font-size: 10px; color: rgba(255,255,255,0.7); margin-bottom: 8px;">CTA GRADIENT</p>
+        <p style="font-family: var(--font-display); font-size: 20px; text-transform: uppercase; color: #fff;">CSATLAKOZZ</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- INPUT -->
+  <section class="test-section">
+    <span class="test-label">Form Elements</span>
+    <div style="max-width: 400px;">
+      <input class="input" type="text" placeholder="Email címed..." style="margin-bottom: 12px;">
+      <input class="input" type="text" placeholder="Mit szeretnél építeni?" style="margin-bottom: 12px;">
+      <button class="btn-primary" style="width: 100;">KÜLDÉS</button>
+    </div>
+  </section>
+
+  <!-- LINKS -->
+  <section class="test-section">
+    <span class="test-label">Links</span>
+    <p style="font-family: var(--font-body); font-size: 16px; line-height: 2;">
+      Ez egy <a href="#">link ami hover-re kap underline-t</a> az aktuális szövegen belül.
+      A linkek mindig <a href="#">accent színűek</a>, és hover-re kapnak aláhúzást.
+    </p>
+  </section>
+
+  <!-- TWO-MODE PREVIEW -->
+  <section class="test-section">
+    <span class="test-label">Two Sub-page Concept Preview</span>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; border-radius: 16px; overflow: hidden; border: 1px solid var(--color-border);">
+      <!-- Community (Light / Earth) -->
+      <div style="background: #f5f0eb; color: #3d2814; padding: 40px; text-align: center;">
+        <p style="font-family: var(--font-mono); font-size: 10px; color: #a8763e; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 16px;">Közösség</p>
+        <h3 style="font-family: var(--font-display); font-size: 24px; text-transform: uppercase; margin-bottom: 8px;">ÉPÍTS. TANULJ. <span style="color: #a8763e;">NÖVEKEDJ.</span></h3>
+        <p style="font-size: 14px; color: #8b6144; margin-bottom: 20px; font-weight: 300;">Valódi projektek, valódi fejlődés.</p>
+        <button style="font-family: var(--font-display); font-size: 13px; text-transform: uppercase; background: #a8763e; color: #fff; border: none; padding: 12px 28px; border-radius: 8px; cursor: pointer; letter-spacing: 0.05em;">CSATLAKOZZ</button>
+      </div>
+      <!-- Corporate (Dark / Amber Dark) -->
+      <div style="background: #1c1917; color: #fef3c7; padding: 40px; text-align: center;">
+        <p style="font-family: var(--font-mono); font-size: 10px; color: #fbbf24; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 16px;">Cégeknek</p>
+        <h3 style="font-family: var(--font-body); font-size: 28px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 8px;">Amit ma kézzel csinálsz,<br><span style="color: #fbbf24; font-family: var(--font-display); text-transform: uppercase; font-size: 24px; font-weight: 400;">holnap magától megy.</span></h3>
+        <p style="font-size: 14px; color: #d4b896; margin-bottom: 20px; font-weight: 300;">Modern eszközök, motivált csapat.</p>
+        <button style="font-family: var(--font-display); font-size: 13px; text-transform: uppercase; background: #d97706; color: #fff; border: none; padding: 12px 28px; border-radius: 8px; cursor: pointer; letter-spacing: 0.05em;">OLDJUK MEG</button>
+      </div>
+    </div>
+  </section>
+
+  <div style="padding: 40px 0; text-align: center;">
+    <p style="font-family: var(--font-mono); font-size: 11px; color: var(--color-text-3);">bildr.hub Design System Test Page - Toggle dark/light with the button in the top right corner.</p>
+  </div>
+
+</div>
+
+</body>
+</html>
+

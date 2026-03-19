@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>bildr.hub - Keretszerződés</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bungee&family=JetBrains+Mono:wght@400;700&family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --color-text: #3d2814;
+      --color-text-2: #6b4423;
+      --color-text-3: #8b6144;
+      --color-accent: #a8763e;
+      --color-accent-dark: #7a5a2e;
+      --color-accent-light: #e8d5b8;
+      --color-border: #d4c5b5;
+      --color-border-light: #ece5dc;
+      --color-stripe: #fdfbf8;
+      --color-bg: #f5f0eb;
+      --font-display: "Bungee", sans-serif;
+      --font-body: "Plus Jakarta Sans", -apple-system, sans-serif;
+      --font-mono: "JetBrains Mono", "SF Mono", monospace;
+    }
+
+    html { font-size: 12px; }
+
+    body {
+      font-family: var(--font-body);
+      color: var(--color-text);
+      line-height: 1.7;
+      background: #e8e0d6;
+    }
+
+    a { color: var(--color-text-2); text-decoration: underline; }
+    a:hover { color: var(--color-text); }
+
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      margin: 20px auto;
+      padding: 24mm 22mm 28mm 22mm;
+      background: #fff;
+      box-shadow: 0 2px 16px rgba(61, 40, 20, 0.12);
+      position: relative;
+    }
+
+    .doc-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding-bottom: 20px;
+      border-bottom: 2px solid var(--color-text);
+      margin-bottom: 32px;
+    }
+
+    .doc-header-brand {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--color-text);
+    }
+
+    .doc-header-brand .accent { color: var(--color-accent); }
+
+    .doc-header-right {
+      text-align: right;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--color-text-2);
+      line-height: 1.8;
+    }
+
+    .doc-header-right a { color: var(--color-text-2); text-decoration: none; }
+    .doc-header-right a:hover { color: var(--color-text); }
+
+    .doc-meta { margin-bottom: 36px; }
+
+    .doc-type {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--color-text-2);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin-bottom: 8px;
+    }
+
+    .doc-title {
+      font-family: var(--font-display);
+      font-size: 24px;
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      line-height: 1.2;
+      margin-bottom: 8px;
+      color: var(--color-text);
+    }
+
+    .doc-subtitle {
+      font-family: var(--font-body);
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--color-text-2);
+      margin-bottom: 16px;
+    }
+
+    .doc-info-row {
+      display: flex;
+      gap: 40px;
+      font-size: 12px;
+      color: var(--color-text-2);
+    }
+
+    .doc-info-row strong { font-weight: 600; color: var(--color-text); }
+
+    .doc-parties {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      margin-bottom: 36px;
+      padding: 20px 24px;
+      background: var(--color-stripe);
+      border-radius: 8px;
+      border: 1px solid var(--color-border-light);
+    }
+
+    .doc-party-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--color-text);
+      margin-bottom: 10px;
+    }
+
+    .doc-party-name { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+
+    .doc-party-details {
+      font-size: 12px;
+      color: var(--color-text-2);
+      line-height: 1.8;
+    }
+
+    .doc-intro {
+      font-size: 12px;
+      line-height: 1.7;
+      margin-bottom: 24px;
+      font-style: italic;
+      color: var(--color-text-2);
+    }
+
+    .doc-section {
+      margin-top: 28px;
+      margin-bottom: 12px;
+      padding-left: 14px;
+      border-left: 3px solid var(--color-accent);
+    }
+
+    .doc-section h2 {
+      font-family: var(--font-body);
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+      color: var(--color-text);
+    }
+
+    .doc-section-num {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--color-text-3);
+      margin-right: 8px;
+    }
+
+    .doc-body { margin-bottom: 8px; }
+    .doc-body p { margin-bottom: 10px; font-size: 12px; line-height: 1.7; }
+    .doc-body ul, .doc-body ol { margin: 6px 0 10px 20px; font-size: 12px; line-height: 1.7; }
+    .doc-body li { margin-bottom: 4px; }
+    .doc-body strong { font-weight: 600; }
+
+    .doc-subsection {
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--color-text-2);
+      margin-top: 14px;
+      margin-bottom: 6px;
+    }
+
+    .clause { display: flex; gap: 8px; margin-bottom: 8px; font-size: 12px; line-height: 1.7; }
+
+    .clause-num {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--color-text-3);
+      min-width: 36px;
+      flex-shrink: 0;
+      padding-top: 1px;
+    }
+
+    .clause-text { flex: 1; }
+    .clause-text ul, .clause-text ol { margin: 6px 0 6px 16px; }
+    .clause-text li { margin-bottom: 3px; }
+
+    .doc-highlight {
+      background: transparent;
+      border-left: 3px solid var(--color-accent);
+      border-radius: 0;
+      padding: 16px 20px;
+      margin: 20px 0;
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    .doc-highlight strong { font-weight: 600; color: var(--color-text); }
+
+    .doc-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0 24px 0;
+      font-size: 12px;
+    }
+
+    .doc-table thead th {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      text-align: left;
+      padding: 10px 14px;
+      background: var(--color-text);
+      color: #f5f0eb;
+    }
+
+    .doc-table thead th:first-child { border-radius: 6px 0 0 0; }
+    .doc-table thead th:last-child { border-radius: 0 6px 0 0; }
+
+    .doc-table tbody td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--color-border-light);
+      vertical-align: top;
+    }
+
+    .doc-table tbody tr:nth-child(even) { background: var(--color-stripe); }
+    .doc-table tbody tr:last-child td { border-bottom: 2px solid var(--color-border); }
+    .doc-table .text-right { text-align: right; white-space: nowrap; }
+    .doc-table .text-bold { font-weight: 600; }
+
+    .doc-signatures {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      margin-top: 48px;
+      padding-top: 24px;
+    }
+
+    .doc-signature-block { border-top: 1px solid var(--color-border); padding-top: 16px; }
+
+    .doc-signature-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--color-text-3);
+      margin-bottom: 40px;
+    }
+
+    .doc-signature-line { border-bottom: 1px solid var(--color-text); margin-bottom: 8px; height: 1px; }
+    .doc-signature-name { font-size: 14px; font-weight: 600; color: var(--color-text); margin-bottom: 2px; }
+
+    .doc-signature-role {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--color-text-2);
+      letter-spacing: 0.05em;
+    }
+
+    .doc-footer {
+      margin-top: 48px;
+      padding-top: 16px;
+      border-top: 1px solid var(--color-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .doc-footer-links {
+      display: flex;
+      gap: 24px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+    }
+
+    .doc-footer-links a { color: var(--color-text-2); text-decoration: underline; display: flex; align-items: center; gap: 5px; }
+    .doc-footer-links a:hover { color: var(--color-text); }
+
+    .doc-footer-page { font-family: var(--font-mono); font-size: 11px; color: var(--color-text-3); }
+
+    .doc-divider { border: none; border-top: 1px solid var(--color-border-light); margin: 20px 0; }
+    .page-break { page-break-before: always; }
+
+    .doc-pdf-btn-wrap { text-align: center; margin-top: 32px; }
+
+    .doc-pdf-btn {
+      display: inline-block;
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      background: transparent;
+      color: var(--color-text-2);
+      padding: 12px 32px;
+      border-radius: 8px;
+      border: 1px solid var(--color-border);
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .doc-pdf-btn:hover { border-color: var(--color-accent); color: var(--color-accent); }
+
+    @media print {
+      html { font-size: 12px; }
+      body { background: #fff; margin: 0; padding: 0; }
+      .page { width: auto; min-height: auto; margin: 0; padding: 0; box-shadow: none; }
+      @page { size: A4; margin: 24mm 22mm 28mm 22mm; }
+      .doc-pdf-btn-wrap { display: none; }
+      .doc-section { page-break-after: avoid; }
+      .doc-parties { page-break-inside: avoid; }
+      .doc-signatures { page-break-inside: avoid; }
+      .doc-table { page-break-inside: avoid; }
+      .doc-footer { page-break-inside: avoid; }
+      a[href^="http"]::after, a[href^="mailto"]::after { content: none; }
+    }
+
+    @media screen {
+      body { padding: 40px 0; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="doc-header">
+    <div class="doc-header-left">
+      <span class="doc-header-brand">BILDR<span class="accent">.HUB</span></span>
+    </div>
+    <div class="doc-header-right">
+      <a href="https://bildr.hu">bildr.hu</a><br>
+      <a href="mailto:ai@bildr.hu">ai@bildr.hu</a>
+    </div>
+  </div>
+
+  <!-- DOCUMENT META -->
+  <div class="doc-meta">
+    <div class="doc-type">Keretszerződés</div>
+    <h1 class="doc-title">AI szoftverfejlesztési és automatizációs együttműködés</h1>
+    <div class="doc-info-row">
+      <span><strong>Kelt:</strong> Budapest, 2026. március 5.</span>
+      <span><strong>Azonosító:</strong> BH-KSZ-2026-001</span>
+    </div>
+  </div>
+
+  <!-- INTRO -->
+  <div class="doc-intro">
+    amely létrejött egyrészről a Szolgáltató, másrészről a Megrendelő (együttesen: Felek) között, az alulírott helyen és napon, az alábbi feltételekkel:
+  </div>
+
+  <!-- PARTIES -->
+  <div class="doc-parties">
+    <div>
+      <div class="doc-party-label">Szolgáltató</div>
+      <div class="doc-party-name">BILDR HUB Kft.</div>
+      <div class="doc-party-details">
+        BILDR HUB Korlátolt Felelősségű Társaság<br>
+        Székhely: 1052 Budapest, Károly körút 10. 2. em. 3B. ajtó<br>
+        Cégjegyzékszám: 01-09-454292<br>
+        Adószám: 33011387-2-41<br>
+        Közösségi adószám: HU33011387<br>
+        Képviseli: <strong>[Ügyvezető neve], ügyvezető</strong>
+      </div>
+    </div>
+    <div>
+      <div class="doc-party-label">Megrendelő</div>
+      <div class="doc-party-name">[Megrendelő neve]</div>
+      <div class="doc-party-details">
+        [Teljes cégnév / magánszemély]<br>
+        Székhely/Lakcím: [Cím]<br>
+        Cégjegyzékszám: [Szám]<br>
+        Adószám: [Szám]<br>
+        Képviseli: <strong>[Név, beosztás]</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       1. A SZERZŐDÉS TÁRGYA
+       ============================================================ -->
+  <div class="doc-section">
+    <h2><span class="doc-section-num">01</span>A szerződés tárgya</h2>
+  </div>
+  <div class="doc-body">
+    <div class="clause">
+      <span class="clause-num">1.1.</span>
+      <div class="clause-text">
+        A Szolgáltató vállalja, hogy a Megrendelő részére <strong>AI-alapú szoftverfejlesztési, automatizációs és technológiai tanácsadási szolgáltatásokat</strong> nyújt, a Megrendelő igényei szerint, folyamatosan, óradíjas elszámolásban.
+      </div>
+    </div>
+    <div class="clause">
+      <span class="clause-num">1.2.</span>
+      <div class="clause-text">
+        A szolgáltatás keretében a Szolgáltató különösen az alábbi tevékenységeket végzi:
+        <ul>
+          <li>üzleti folyamatok AI-alapú fejlesztésének és automatizálásának feltérképezése, elemzése,</li>
+          <li>megoldások megtervezése, fejlesztése és megvalósítása,</li>
+          <li>egyedi szoftver- és automatizációs rendszerek építése, tesztelése és átadásra történő felkészítése,</li>
+          <li>a megvalósított megoldások üzemeltetési támogatása, karbantartása és finomhangolása,</li>
+          <li>technológiai tanácsadás és stratégiai javaslatok,</li>
+          <li>a fejlesztéshez kapcsolódó dokumentáció és szükség szerinti oktatás biztosítása.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="clause">
+      <span class="clause-num">1.3.</span>
+      <div class="clause-text">
+        A Felek megegyeznek, hogy a konkrét feladatok, azok specifikációja és a ráfordított órák minden esetben <strong>Teljesítési Igazolásban (TIG)</strong> kerülnek rögzítésre.
+      </div>
+    </div>
+    <div class="clause">
+      <span class="clause-num">1.4.</span>
+      <div class="clause-text">
+        A Szolgáltató jogosult az általa alkalmasnak tartott módszereket, eszközöket és technológiákat használni, beleértve AI rendszerek, automatizációs platformok és felhőszolgáltatások alkalmazását.
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       2. KÖLCSÖNÖS EGYÜTTMŰKÖDÉSI SZÁNDÉK
+       ============================================================ -->
+  <div class="doc-section">
+    <h2><span class="doc-section-num">02</span>Kölcsönös együttműködési szándék</h2>
+  </div>
+  <div class="doc-body">
+    <div class="clause">
+      <span class="clause-num">2.1.</span>
+      <div class="clause-text">
+        A Felek kijelentik, hogy jelen Szerződést a kölcsönös együttműködés szándékával kötik meg, azzal a célkitűzéssel, hogy az AI-alapú fejlesztés eredményeit a Megrendelő számára valódi, mérhető üzleti értékké alakítsák.
+      </div>
+    </div>
+    <div class="clause">
+      <span class="clause-num">2.2.</span>
+      <div class="clause-text">
+        <strong>Megrendelői közreműködés:</strong> A Megrendelő vállalja, hogy aktívan közreműködik a projektek sikerében: biztosítja a szükséges információkat, hozzáféréseket, tesztelési visszajelzéseket és döntéseket a Szolgáltató számára, időben és a megbeszélt határidők szerint.
+      </div>
+    </div>
+    <div class="clause">
+      <span class="clause-num">2.3.</span>
+      <div class="clause-text">
+        A Szolgáltató vállalja, hogy a ráfordított időt és erőforrást a Megrendelő érdekeinek megfelelő, színvonalas megoldások létrehozására fordítja, és a fejlesztés során proaktívan kommunikál a Megrendelővel.
+      </div>
+    </div>
+    <div class="clause">
+      <span class="clause-num">2.4.</span>
+      <div class="clause-text">
+        Mindkét Fél kölcsönösen elismeri, hogy a sikeres projektek alapja a nyílt kommunikáció, az átláthatóság és a közös célok iránti elkötelezettség.
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       3. TELJESÍTÉS HELYE ÉS MÓDJA
+       ============================================================ -->
+  <div class="doc-section">
+    <h2><span class="doc-section-num">03</span>Teljesítés helye és módja</h2>
+  </div>
+  <div class="doc-body">
+    <div class="clause">
+      <span class="clause-num">3.1.</span>
+      <div class="clause-text">
+        A szolgáltatás <strong>folyamatosan, igény szerint</strong> történik, a Megrendelő eseti megrendelései (feladatkiosztás, email, projektmenedzsment eszköz) alapján.
+      </div>
+    </div>
+    <div class="clause">
+      <span class="clause-num">3.2.</span>
+      <div class="clause-text">
+        A teljesítés helye: online (távelérés útján), illetve szükség esetén a Megrendelő által megjelölt helyszínen.
+      </div>
+    </div>
+    <div class="clause">
+      <span class="clause-num">3.3.</span>
+      <div class="clause-text">
+        Az egyes feladatok befejezését a Szolgáltató a Megrendelőnek jelzi, aki az átvételt a Teljesítési Igazolás aláírásával igazolja. Amennyiben a Megrendelő a jelzéstől számított 5 munkanapon belül nem jelzi írásban kifogását, a teljesítés elfogadottnak tekintendő.
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       4. DÍJAZÁS ÉS FIZETÉSI FELTÉTELEK
+       ============================================================ -->
+  <div class="doc-section">
+    <h2><span class="doc-section-num">04</span>Díjazás és fizetési feltételek</h2>
+  </div>
+  <div class="doc-body">
+    <div class="clause">
+      <span class="clause-num">4.1.</span>
+      <div class="clause-text">
+        A Felek az alábbi díjszabásban állapodnak meg:
+      </div>
+    </div>
+
+    <table class="doc-table">
+      <thead>
+        <tr>
+          <th>Szolgáltatás típusa</th>
+          <th>Leírás</th>
+          <th class="text-right">Óradíj</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="text-bold">Fejlesztés</td>
+          <td>Szoftverfejlesztés, automatizáció, rendszerépítés, integrációk</td>
+          <td class="text-right">[X] Ft + ÁFA / óra</td>
+        </tr>
+        <tr>
+          <td class="text-bold">Tanácsadás</td>
+          <td>Technológiai konzultáció, rendszertervezés, stratégiai javaslatok</td>
+          <td class="text-right">[X] Ft + ÁFA / óra</td>
+        </tr>
+        <tr>
+          <td class="text-bold">Karbantartás</td>
+          <td>Meglévő rendszerek üzemeltetése, monitorozás, hibajavítás</td>
+          <td class="text-right">[X] Ft + ÁFA / óra</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="clause">
+      <span class="clause-num">4.2.</span>
+      <div class="clause-text">
+        A Szolgáltató a teljesített órák alapján, a Teljesítési Igazolással alátámasztva számlát állít ki. Az elszámolási időszak: <strong>havi</strong> (minden hónap utolsó munkanapján a Szolgáltató összesíti az adott havi ráfordítást).
+      </div>
+    </div>
+    <div class="clause">
+      <span class="clause-num">4.3.</span>
+      <div class="clause-text">
+        A fizetés módja: banki átutalás a Szolgáltató számláján feltüntetett bankszámlaszámra. Fizetési határidő: a számla kézhezvételétől számított <strong>8 naptári nap</strong>.
+      </div>
+    </div>
+    <div class="clause">
+      <span class="clause-num">4.4.</span>
+      <div class="clause-text">
+        A Megrendelő elfogadja, hogy a Teljesítési Igazolás aláírásával a Szolgáltató teljesítése megtörténtnek minősül, és a számla kiállításának alapjául szolgál.
+      </div>
+    </div>
+    <div class="clause">
+      <span class="clause-num">4.5.</span>
+      <div class="clause-text">
+        <strong>Késedelmes fizetés:</strong> Késedelmes fizetés esetén a Szolgáltató jogosult a Ptk. szerinti késedelmi kamatot felszámítani. 15 napot meghaladó késedelem esetén a Szolgáltató jogosult a folyamatban lévő munkát a fizetés beérkezéséig felfüggeszteni.
+      </div>
+    </div>
+    <div class="clause">
+      <span class="clause-num">4.6.</span>
+      <div class="clause-text">
+        <strong>Díjmódosítás:</strong> A Szolgáltató jogosult a díjszabást évente egyszer, az éves fogyasztói árindex mértékében módosítani. Ennél nagyobb mértékű díjmódosítás a Megrendelő írásbeli hozzájárulásával érvényes, és 30 napos értesítési idővel lép hatályba.
+      </div>
+    </div>
+    <div class="clause">
+      <span class="clause-num">4.7.</span>
+      <div class="clause-text">
+        <strong>Külső szolgáltatások költségei:</strong> A projekt során felhasznált harmadik féltől származó szoftverek, licencek és szolgáltatások költségei (domain, hosting, AI API-k, SaaS előfizetések) nem részei a Szolgáltató díjának. Ezeket a Megrendelő közvetlenül viseli, vagy a Szolgáltató 1:1 arányban tovább számlázza.
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       5. SZELLEMI TULAJDON ÉS SZERZŐI JOGOK
+       ============================================================ -->
+  <div class="doc-section">
+    <h2><span class="doc-section-num">05</span>Szellemi tulajdon és szerzői jogok</h2>
+  </div>
+  <div class="doc-body">
+    <div class="doc-subsection">Projekt-specifikus munkaanyag</div>
+    <div class="clause">
+      <span class="clause-num">5.1.</span>
+      <div class="clause-text">
+        A Szolgáltató által a Megrendelő részére készített egyedi fejlesztések, workflow-k, forráskód, konfigurációk és dokumentáció a vonatkozó Teljesítési Igazolás szerinti díj maradéktalan megfizetése után a Megrendelő tulajdonába kerülnek. A Megrendelő ezeket szabadon használhatja, módosíthatja és továbbfejlesztheti.
+      </div>
+    </div>
+
+    <div class="doc-subsection">A Szolgáltató szellemi tulajdona</div>
+    <div class="clause">
+      <span class="clause-num">5.2.</span>
+      <div class="clause-text">
+        A Szolgáltató saját módszertana, eszközei, keretrendszerei, sablonjai, prompt könyvtárai, workflow mintái és általános know-how-ja a Szolgáltató kizárólagos szellemi tulajdona marad - függetlenül attól, hogy ezek felhasználásra kerültek-e.
+      </div>
+    </div>
+    <div class="clause">
+      <span class="clause-num">5.3.</span>
+      <div class="clause-text">
+        A Szolgáltató jogosult a projektek során szerzett általános tapasztalatokat, módszereket és megoldási mintákat más ügyfeleinek nyújtott szolgáltatásokban is felhasználni, amennyiben ez nem sérti a titoktartási kötelezettséget (7. pont).
+      </div>
+    </div>
+
+    <div class="doc-subsection">Archiválás</div>
+    <div class="clause">
+      <span class="clause-num">5.4.</span>
+      <div class="clause-text">
+        A Szolgáltató jogosult a projekt munkaanyagainak másolatát belső archiválási és minőségbiztosítási célokra megőrizni.
+      </div>
+    </div>
+
+    <div class="doc-subsection">Alvállalkozók</div>
+    <div class="clause">
+      <span class="clause-num">5.5.</span>
+      <div class="clause-text">
+        A Szolgáltató jogosult teljesítési segédet, alvállalkozót igénybe venni. A Szolgáltató teljes mértékben felel az általa bevont személyek munkájáért, és szavatol azért, hogy azok a titoktartási kötelezettséget magukra nézve kötelezőnek ismerik el.
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       6. FELELŐSSÉGVÁLLALÁS
+       ============================================================ -->
+  <div class="doc-section">
+    <h2><span class="doc-section-num">06</span>Felelősségvállalás</h2>
+  </div>
+  <div class="doc-body">
+    <div class="clause">
+      <span class="clause-num">6.1.</span>
+      <div class="clause-text">
+        A Szolgáltató felelősséget vállal az általa végzett fejlesztés szakmai színvonaláért és az átadott megoldások specifikációval való összhangjáért. Az átadott fejlesztések működőképes, tesztelt állapotban kerülnek a Megrendelő részére átadásra.
+      </div>
+    </div>
+    <div class="clause">
+      <span class="clause-num">6.2.</span>
+      <div class="clause-text">
+        Amennyiben az átadott megoldás a dokumentált specifikációtól eltérő hibát tartalmaz, a Szolgáltató köteles azt az átadástól számított <strong>30 napon</strong> belül, külön díjazás nélkül javítani.
+      </div>
+    </div>
+    <div class="clause">
+      <span class="clause-num">6.3.</span>
+      <div class="clause-text">
+        A Szolgáltató felelőssége az adott Teljesítési Igazolás szerinti díj összegére korlátozódik. Közvetett károkért (elmaradt haszon, adatvesztés, üzleti lehetőség elvesztése) a Szolgáltató nem vállal felelősséget.
+      </div>
+    </div>
+    <div class="clause">
+      <span class="clause-num">6.4.</span>
+      <div class="clause-text">
+        <strong>Harmadik fél szoftverek:</strong> A Szolgáltató nem felel harmadik féltől származó szoftverek, platformok működéséért, elérhetőségéért vagy feltételváltozásaiért.
+      </div>
+    </div>
+    <div class="clause">
+      <span class="clause-num">6.5.</span>
+      <div class="clause-text">
+        <strong>Módosítás utáni felelősség:</strong> Ha az átadott munkaanyagot a Megrendelő vagy harmadik fél a Szolgáltató írásbeli jóváhagyása nélkül módosítja, a módosítással érintett részekért a Szolgáltató felelőssége megszűnik.
+      </div>
+    </div>
+    <div class="clause">
+      <span class="clause-num">6.6.</span>
+      <div class="clause-text">
+        A Megrendelő felelősséget vállal azért, hogy a fejlesztéshez szükséges információkat, hozzáféréseket és visszajelzéseket időben biztosítja. Az ezek hiányából felmerülő késésért a Szolgáltató nem terhelhető.
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       7. TITOKTARTÁS
+       ============================================================ -->
+  <div class="doc-section">
+    <h2><span class="doc-section-num">07</span>Titoktartás</h2>
+  </div>
+  <div class="doc-body">
+    <div class="clause">
+      <span class="clause-num">7.1.</span>
+      <div class="clause-text">
+        <strong>Kölcsönös kötelezettség:</strong> A Felek titokban tartanak minden olyan információt, amelyet a Szerződés teljesítése során kaptak. Ez különösen vonatkozik: üzleti folyamatokra, technológiai megoldásokra, árakra, ügyféllistákra, belső rendszerekre, forráskódra és minden nem nyilvánosan elérhető információra.
+      </div>
+    </div>
+    <div class="clause">
+      <span class="clause-num">7.2.</span>
+      <div class="clause-text">
+        <strong>Kivételek:</strong> Nem minősül titoktartási kötelezettség megsértésének, ha az információ:
+        <ul>
+          <li>nyilvánosan hozzáférhető, vagy a fél hibáján kívül vált azzá,</li>
+          <li>a fél már a közlés előtt jogszerűen birtokolta,</li>
+          <li>harmadik féltől jogszerűen szerezte meg,</li>
+          <li>jogszabályi kötelezettség vagy hatósági megkeresés alapján kerül közlésre,</li>
+          <li>a Szolgáltató belső fejlesztési célokra használ fel anonimizált, egyedi ügyfélre nem visszavezethető formában.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="clause">
+      <span class="clause-num">7.3.</span>
+      <div class="clause-text">
+        A titoktartási kötelezettség a Szerződés megszűnése után is hatályban marad, időbeli korlátozás nélkül. A Felek felelősek alvállalkozóik és munkavállalóik titoktartásáért is.
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       8. REFERENCIA JOG
+       ============================================================ -->
+  <div class="doc-section">
+    <h2><span class="doc-section-num">08</span>Referencia jog</h2>
+  </div>
+  <div class="doc-body">
+    <div class="clause">
+      <span class="clause-num">8.1.</span>
+      <div class="clause-text">
+        A Szolgáltató jogosult az együttműködést referenciaként feltüntetni. Ez magában foglalja a Megrendelő nevét, logóját és a projektek általános leírását - kizárólag abban a mértékben, amennyiben az nem tartalmaz bizalmas információkat. A Megrendelő kérésére a Szolgáltató a referencia feltüntetésétől eltekint.
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       9. ADATVÉDELEM
+       ============================================================ -->
+  <div class="doc-section">
+    <h2><span class="doc-section-num">09</span>Adatvédelem</h2>
+  </div>
+  <div class="doc-body">
+    <div class="clause">
+      <span class="clause-num">9.1.</span>
+      <div class="clause-text">
+        A Felek kötelezik magukat, hogy tevékenységüket a hatályos adatvédelmi jogszabályok - különösen a GDPR és az információs önrendelkezési jogról szóló 2011. évi CXII. törvény - megtartásával végzik.
+      </div>
+    </div>
+    <div class="clause">
+      <span class="clause-num">9.2.</span>
+      <div class="clause-text">
+        Amennyiben valamely feladat személyes adatok kezelésével jár, a Felek a szükséges adatfeldolgozói megállapodást külön rögzítik.
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       10. VIS MAIOR
+       ============================================================ -->
+  <div class="doc-section">
+    <h2><span class="doc-section-num">10</span>Vis maior</h2>
+  </div>
+  <div class="doc-body">
+    <div class="clause">
+      <span class="clause-num">10.1.</span>
+      <div class="clause-text">
+        Egyik Fél sem felel a teljesítés elmaradásáért, amennyiben azt olyan előre nem látható, elháríthatatlan, a Felek hatáskörén kívül eső esemény okozza (vis maior). Az érintett Fél köteles a vis maior eseményt haladéktalanul, írásban jelezni.
+      </div>
+    </div>
+    <div class="clause">
+      <span class="clause-num">10.2.</span>
+      <div class="clause-text">
+        Amennyiben a vis maior állapot 60 napot meghaladóan fennáll, bármelyik Fél jogosult a Szerződést kötbérmentesen felmondani. Az addig elvégzett munka díja fizetendő.
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       11. SZERZŐDÉS IDŐTARTAMA ÉS MEGSZŰNÉSE
+       ============================================================ -->
+  <div class="doc-section">
+    <h2><span class="doc-section-num">11</span>A szerződés időtartama és megszűnése</h2>
+  </div>
+  <div class="doc-body">
+    <div class="clause">
+      <span class="clause-num">11.1.</span>
+      <div class="clause-text">
+        Jelen Szerződés <strong>határozatlan időtartamra</strong> jön létre.
+      </div>
+    </div>
+    <div class="clause">
+      <span class="clause-num">11.2.</span>
+      <div class="clause-text">
+        <strong>Rendes felmondás:</strong> Bármelyik Fél jogosult a Szerződést írásban, <strong>30 napos</strong> felmondási idővel megszüntetni. A felmondás a már teljesített szolgáltatásokat és kifizetéseket nem érinti.
+      </div>
+    </div>
+    <div class="clause">
+      <span class="clause-num">11.3.</span>
+      <div class="clause-text">
+        <strong>Rendkívüli felmondás:</strong> Bármelyik Fél jogosult a Szerződést azonnali hatállyal megszüntetni, amennyiben a másik Fél:
+        <ul>
+          <li>lényeges szerződéses kötelezettségét ismételten vagy súlyosan megsérti, és azt írásbeli felszólításra 15 napon belül nem orvosolja,</li>
+          <li>fizetésképtelenné válik, ellene csőd- vagy felszámolási eljárás indul,</li>
+          <li>a titoktartási kötelezettségét súlyosan megsérti.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="clause">
+      <span class="clause-num">11.4.</span>
+      <div class="clause-text">
+        <strong>Folyamatban lévő feladatok:</strong> Felmondás esetén a Felek kölcsönösen kötelezettséget vállalnak, hogy a felmondási idő alatt a megkezdett munkákat észszerűen lezárják, vagy a Megrendelő számára átadják. A Szolgáltató köteles a felmondási idő alatt teljes körűen együttműködni az átadásban.
+      </div>
+    </div>
+    <div class="clause">
+      <span class="clause-num">11.5.</span>
+      <div class="clause-text">
+        A Szerződés megszűnése nem érinti a titoktartási, szellemi tulajdonjogi és fizetési kötelezettségeket, amelyek a természetüknél fogva a megszűnés után is hatályban maradnak.
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       12. KAPCSOLATTARTÁS
+       ============================================================ -->
+  <div class="doc-section">
+    <h2><span class="doc-section-num">12</span>Kapcsolattartás</h2>
+  </div>
+  <div class="doc-body">
+    <div class="clause">
+      <span class="clause-num">12.1.</span>
+      <div class="clause-text">
+        Kapcsolattartó személyek:
+        <ul>
+          <li><strong>Szolgáltató részéről:</strong> [Név], email: [email], tel: [szám]</li>
+          <li><strong>Megrendelő részéről:</strong> [Név], email: [email], tel: [szám]</li>
+        </ul>
+      </div>
+    </div>
+    <div class="clause">
+      <span class="clause-num">12.2.</span>
+      <div class="clause-text">
+        A kapcsolattartó személy és elérhetőség módosítása a másik Fél elektronikus értesítésével történik, és nem igényel külön szerződésmódosítást.
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       13. ALKALMAZANDÓ JOG ÉS VITARENDEZÉS
+       ============================================================ -->
+  <div class="doc-section">
+    <h2><span class="doc-section-num">13</span>Alkalmazandó jog és vitarendezés</h2>
+  </div>
+  <div class="doc-body">
+    <div class="clause">
+      <span class="clause-num">13.1.</span>
+      <div class="clause-text">
+        A jelen Szerződésre a magyar jog, különösen a 2013. évi V. törvény (Ptk.) rendelkezései az irányadók.
+      </div>
+    </div>
+    <div class="clause">
+      <span class="clause-num">13.2.</span>
+      <div class="clause-text">
+        Vitás kérdésekben a Felek elsősorban egyeztetés útján keresnek megoldást. Amennyiben 30 napon belül nem jön létre megegyezés, a Felek a Budapesti II. és III. Kerületi Bíróság, illetve hatáskörtől függően a Fővárosi Törvényszék kizárólagos illetékességét kötik ki.
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       14. ÁLTALÁNOS SZERZŐDÉSI FELTÉTELEK ÉS ZÁRÓ RENDELKEZÉSEK
+       ============================================================ -->
+  <div class="doc-section">
+    <h2><span class="doc-section-num">14</span>Záró rendelkezések</h2>
+  </div>
+  <div class="doc-body">
+    <div class="clause">
+      <span class="clause-num">14.1.</span>
+      <div class="clause-text">
+        A jelen Szerződésben nem szabályozott kérdésekben a Szolgáltató Általános Szerződési Feltételei (ÁSZF) az irányadók, amelyek elérhetők a <a href="https://bildr.hu/aszf">bildr.hu/aszf</a> címen. A Megrendelő kijelenti, hogy az ÁSZF-et megismerte és elfogadja.
+      </div>
+    </div>
+    <div class="clause">
+      <span class="clause-num">14.2.</span>
+      <div class="clause-text">
+        Az ÁSZF és a jelen Szerződés közötti ellentmondás esetén a jelen Szerződés rendelkezései az irányadók.
+      </div>
+    </div>
+    <div class="clause">
+      <span class="clause-num">14.3.</span>
+      <div class="clause-text">
+        Jelen Szerződés kizárólag kölcsönös, egybehangzó, írásbeli nyilatkozattal módosítható.
+      </div>
+    </div>
+    <div class="clause">
+      <span class="clause-num">14.4.</span>
+      <div class="clause-text">
+        Ha a Szerződés bármely rendelkezése érvénytelen, az nem érinti a többi rendelkezés érvényességét. Az érvénytelen rendelkezés helyébe a Felek eredeti szándékát legjobban megközelítő rendelkezés lép.
+      </div>
+    </div>
+    <div class="clause">
+      <span class="clause-num">14.5.</span>
+      <div class="clause-text">
+        A Felek kijelentik, hogy a Szerződést elolvasták, értelmezték, és mint akaratukkal mindenben megegyezőt, jóváhagyólag írják alá.
+      </div>
+    </div>
+  </div>
+
+  <hr class="doc-divider">
+
+  <!-- SIGNATURES -->
+  <div class="doc-signatures">
+    <div class="doc-signature-block">
+      <div class="doc-signature-label">Szolgáltató</div>
+      <div class="doc-signature-line"></div>
+      <div class="doc-signature-name">[Ügyvezető neve]</div>
+      <div class="doc-signature-role">ügyvezető, BILDR HUB Kft.</div>
+    </div>
+    <div class="doc-signature-block">
+      <div class="doc-signature-label">Megrendelő</div>
+      <div class="doc-signature-line"></div>
+      <div class="doc-signature-name">[Aláíró neve]</div>
+      <div class="doc-signature-role">[beosztás, cégnév]</div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="doc-footer">
+    <div class="doc-footer-links">
+      <a href="https://bildr.hu">bildr.hu</a>
+      <a href="mailto:ai@bildr.hu">ai@bildr.hu</a>
+    </div>
+    <div class="doc-footer-page">BILDR HUB Kft. - Keretszerződés</div>
+  </div>
+
+  <!-- PDF BUTTON -->
+  <div class="doc-pdf-btn-wrap">
+    <button class="doc-pdf-btn" onclick="window.print()">PDF LETÖLTÉS</button>
+  </div>
+
+</div>
+
+</body>
+</html>
+

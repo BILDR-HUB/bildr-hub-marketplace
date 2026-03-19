@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>bildr.hub - Teljesítési Igazolás</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bungee&family=JetBrains+Mono:wght@400;700&family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --color-text: #3d2814;
+      --color-text-2: #6b4423;
+      --color-text-3: #8b6144;
+      --color-accent: #a8763e;
+      --color-accent-dark: #7a5a2e;
+      --color-accent-light: #e8d5b8;
+      --color-border: #d4c5b5;
+      --color-border-light: #ece5dc;
+      --color-stripe: #fdfbf8;
+      --color-bg: #f5f0eb;
+      --font-display: "Bungee", sans-serif;
+      --font-body: "Plus Jakarta Sans", -apple-system, sans-serif;
+      --font-mono: "JetBrains Mono", "SF Mono", monospace;
+    }
+
+    html { font-size: 12px; }
+
+    body {
+      font-family: var(--font-body);
+      color: var(--color-text);
+      line-height: 1.7;
+      background: #e8e0d6;
+    }
+
+    a { color: var(--color-text-2); text-decoration: underline; }
+    a:hover { color: var(--color-text); }
+
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      margin: 20px auto;
+      padding: 24mm 22mm 28mm 22mm;
+      background: #fff;
+      box-shadow: 0 2px 16px rgba(61, 40, 20, 0.12);
+      position: relative;
+    }
+
+    .doc-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding-bottom: 20px;
+      border-bottom: 2px solid var(--color-text);
+      margin-bottom: 32px;
+    }
+
+    .doc-header-brand {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--color-text);
+    }
+
+    .doc-header-brand .accent { color: var(--color-accent); }
+
+    .doc-header-right {
+      text-align: right;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--color-text-2);
+      line-height: 1.8;
+    }
+
+    .doc-header-right a { color: var(--color-text-2); text-decoration: none; }
+    .doc-header-right a:hover { color: var(--color-text); }
+
+    .doc-meta { margin-bottom: 36px; }
+
+    .doc-type {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--color-text-2);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin-bottom: 8px;
+    }
+
+    .doc-title {
+      font-family: var(--font-display);
+      font-size: 24px;
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      line-height: 1.2;
+      margin-bottom: 16px;
+      color: var(--color-text);
+    }
+
+    .doc-info-row {
+      display: flex;
+      gap: 40px;
+      font-size: 12px;
+      color: var(--color-text-2);
+      flex-wrap: wrap;
+    }
+
+    .doc-info-row strong { font-weight: 600; color: var(--color-text); }
+
+    /* --- Reference Box --- */
+    .doc-ref-box {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 32px;
+      padding: 16px 20px;
+      background: var(--color-stripe);
+      border-radius: 8px;
+      border: 1px solid var(--color-border-light);
+      font-size: 12px;
+      line-height: 1.8;
+    }
+
+    .doc-ref-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--color-text-3);
+      margin-bottom: 4px;
+    }
+
+    .doc-ref-value {
+      font-weight: 600;
+      color: var(--color-text);
+    }
+
+    /* --- Parties mini --- */
+    .doc-parties-mini {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      margin-bottom: 28px;
+      font-size: 12px;
+    }
+
+    .doc-party-mini-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--color-text-3);
+      margin-bottom: 4px;
+    }
+
+    .doc-party-mini-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--color-text);
+    }
+
+    .doc-party-mini-details {
+      font-size: 12px;
+      color: var(--color-text-2);
+    }
+
+    /* --- Section --- */
+    .doc-section {
+      margin-top: 28px;
+      margin-bottom: 12px;
+      padding-left: 14px;
+      border-left: 3px solid var(--color-accent);
+    }
+
+    .doc-section h2 {
+      font-family: var(--font-body);
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+      color: var(--color-text);
+    }
+
+    .doc-section-num {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--color-text-3);
+      margin-right: 8px;
+    }
+
+    .doc-body { margin-bottom: 8px; }
+    .doc-body p { margin-bottom: 10px; font-size: 12px; line-height: 1.7; }
+
+    /* --- Tables --- */
+    .doc-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0 24px 0;
+      font-size: 12px;
+    }
+
+    .doc-table thead th {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      text-align: left;
+      padding: 10px 14px;
+      background: var(--color-text);
+      color: #f5f0eb;
+    }
+
+    .doc-table thead th:first-child { border-radius: 6px 0 0 0; }
+    .doc-table thead th:last-child { border-radius: 0 6px 0 0; }
+
+    .doc-table tbody td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--color-border-light);
+      vertical-align: top;
+    }
+
+    .doc-table tbody tr:nth-child(even) { background: var(--color-stripe); }
+    .doc-table tbody tr:last-child td { border-bottom: 2px solid var(--color-border); }
+    .doc-table .text-right { text-align: right; white-space: nowrap; }
+    .doc-table .text-center { text-align: center; }
+    .doc-table .text-bold { font-weight: 600; }
+
+    /* --- Total Row --- */
+    .doc-total-row {
+      display: flex;
+      justify-content: flex-end;
+      padding: 16px 0;
+      margin-top: -8px;
+      margin-bottom: 24px;
+    }
+
+    .doc-total-box {
+      border-top: 2px solid var(--color-accent);
+      padding: 14px 24px 14px 0;
+      text-align: right;
+    }
+
+    .doc-total-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--color-text-2);
+      margin-bottom: 4px;
+    }
+
+    .doc-total-amount {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--color-text);
+    }
+
+    /* --- Notes Box --- */
+    .doc-notes {
+      background: var(--color-stripe);
+      border: 1px solid var(--color-border-light);
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin: 20px 0;
+      font-size: 12px;
+      line-height: 1.7;
+      min-height: 80px;
+    }
+
+    .doc-notes-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--color-text-3);
+      margin-bottom: 8px;
+    }
+
+    /* --- Declaration --- */
+    .doc-declaration {
+      background: transparent;
+      border-left: 3px solid var(--color-accent);
+      padding: 16px 20px;
+      margin: 24px 0;
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    /* --- Signatures --- */
+    .doc-signatures {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      margin-top: 36px;
+      padding-top: 24px;
+    }
+
+    .doc-signature-block { border-top: 1px solid var(--color-border); padding-top: 16px; }
+
+    .doc-signature-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--color-text-3);
+      margin-bottom: 8px;
+    }
+
+    .doc-signature-date {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--color-text-3);
+      margin-bottom: 32px;
+    }
+
+    .doc-signature-line { border-bottom: 1px solid var(--color-text); margin-bottom: 8px; height: 1px; }
+    .doc-signature-name { font-size: 14px; font-weight: 600; color: var(--color-text); margin-bottom: 2px; }
+
+    .doc-signature-role {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--color-text-2);
+      letter-spacing: 0.05em;
+    }
+
+    /* --- Footer --- */
+    .doc-footer {
+      margin-top: 48px;
+      padding-top: 16px;
+      border-top: 1px solid var(--color-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .doc-footer-links {
+      display: flex;
+      gap: 24px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+    }
+
+    .doc-footer-links a { color: var(--color-text-2); text-decoration: underline; }
+    .doc-footer-links a:hover { color: var(--color-text); }
+
+    .doc-footer-page { font-family: var(--font-mono); font-size: 11px; color: var(--color-text-3); }
+
+    .doc-divider { border: none; border-top: 1px solid var(--color-border-light); margin: 20px 0; }
+
+    .doc-pdf-btn-wrap { text-align: center; margin-top: 32px; }
+
+    .doc-pdf-btn {
+      display: inline-block;
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      background: transparent;
+      color: var(--color-text-2);
+      padding: 12px 32px;
+      border-radius: 8px;
+      border: 1px solid var(--color-border);
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .doc-pdf-btn:hover { border-color: var(--color-accent); color: var(--color-accent); }
+
+    @media print {
+      html { font-size: 12px; }
+      body { background: #fff; margin: 0; padding: 0; }
+      .page { width: auto; min-height: auto; margin: 0; padding: 0; box-shadow: none; }
+      @page { size: A4; margin: 24mm 22mm 28mm 22mm; }
+      .doc-pdf-btn-wrap { display: none; }
+      .doc-signatures { page-break-inside: avoid; }
+      .doc-table { page-break-inside: avoid; }
+      .doc-footer { page-break-inside: avoid; }
+      a[href^="http"]::after, a[href^="mailto"]::after { content: none; }
+    }
+
+    @media screen {
+      body { padding: 40px 0; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="doc-header">
+    <div class="doc-header-left">
+      <span class="doc-header-brand">BILDR<span class="accent">.HUB</span></span>
+    </div>
+    <div class="doc-header-right">
+      <a href="https://bildr.hu">bildr.hu</a><br>
+      <a href="mailto:ai@bildr.hu">ai@bildr.hu</a>
+    </div>
+  </div>
+
+  <!-- DOCUMENT META -->
+  <div class="doc-meta">
+    <div class="doc-type">Teljesítési Igazolás</div>
+    <h1 class="doc-title">Teljesítési Igazolás</h1>
+    <div class="doc-info-row">
+      <span><strong>Azonosító:</strong> BH-TIG-2026-001</span>
+      <span><strong>Kiállítás dátuma:</strong> 2026. március 5.</span>
+      <span><strong>Teljesítési időszak:</strong> 2026. február 1. - 2026. február 28.</span>
+    </div>
+  </div>
+
+  <!-- REFERENCE CONTRACT -->
+  <div class="doc-ref-box">
+    <div>
+      <div class="doc-ref-label">Alapszerződés azonosítója</div>
+      <div class="doc-ref-value">[BH-KSZ-2026-001 vagy BH-VSZ-2026-001]</div>
+    </div>
+    <div>
+      <div class="doc-ref-label">Alapszerződés típusa</div>
+      <div class="doc-ref-value">[Keretszerződés / Vállalkozási Szerződés]</div>
+    </div>
+    <div>
+      <div class="doc-ref-label">Projekt neve</div>
+      <div class="doc-ref-value">[Projekt megnevezése]</div>
+    </div>
+    <div>
+      <div class="doc-ref-label">Fázis / Mérföldkő</div>
+      <div class="doc-ref-value">[pl. II. fázis - Fejlesztés / Havi elszámolás]</div>
+    </div>
+  </div>
+
+  <!-- PARTIES MINI -->
+  <div class="doc-parties-mini">
+    <div>
+      <div class="doc-party-mini-label">Szolgáltató</div>
+      <div class="doc-party-mini-name">BILDR HUB Kft.</div>
+      <div class="doc-party-mini-details">Adószám: 33011387-2-41</div>
+    </div>
+    <div>
+      <div class="doc-party-mini-label">Megrendelő</div>
+      <div class="doc-party-mini-name">[Megrendelő neve]</div>
+      <div class="doc-party-mini-details">Adószám: [Szám]</div>
+    </div>
+  </div>
+
+  <hr class="doc-divider">
+
+  <!-- SECTION: Teljesített feladatok -->
+  <div class="doc-section">
+    <h2><span class="doc-section-num">01</span>Teljesített feladatok</h2>
+  </div>
+
+  <table class="doc-table">
+    <thead>
+      <tr>
+        <th style="width: 55%">Feladat leírása</th>
+        <th class="text-center">Dátum</th>
+        <th class="text-center">Óra</th>
+        <th class="text-right">Összeg</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>[Feladat megnevezése és rövid leírása]</td>
+        <td class="text-center">[ÉÉÉÉ.HH.NN]</td>
+        <td class="text-center">[X]</td>
+        <td class="text-right">[X] Ft</td>
+      </tr>
+      <tr>
+        <td>[Feladat megnevezése és rövid leírása]</td>
+        <td class="text-center">[ÉÉÉÉ.HH.NN]</td>
+        <td class="text-center">[X]</td>
+        <td class="text-right">[X] Ft</td>
+      </tr>
+      <tr>
+        <td>[Feladat megnevezése és rövid leírása]</td>
+        <td class="text-center">[ÉÉÉÉ.HH.NN]</td>
+        <td class="text-center">[X]</td>
+        <td class="text-right">[X] Ft</td>
+      </tr>
+      <tr>
+        <td>[Feladat megnevezése és rövid leírása]</td>
+        <td class="text-center">[ÉÉÉÉ.HH.NN]</td>
+        <td class="text-center">[X]</td>
+        <td class="text-right">[X] Ft</td>
+      </tr>
+      <tr>
+        <td>[Feladat megnevezése és rövid leírása]</td>
+        <td class="text-center">[ÉÉÉÉ.HH.NN]</td>
+        <td class="text-center">[X]</td>
+        <td class="text-right">[X] Ft</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="doc-total-row">
+    <div class="doc-total-box">
+      <div class="doc-total-label">Összesen (nettó)</div>
+      <div class="doc-total-amount">[X] Ft + ÁFA</div>
+    </div>
+  </div>
+
+  <!-- SECTION: Összesítés -->
+  <div class="doc-section">
+    <h2><span class="doc-section-num">02</span>Összesítés</h2>
+  </div>
+
+  <table class="doc-table">
+    <thead>
+      <tr>
+        <th>Tétel</th>
+        <th class="text-center">Mennyiség</th>
+        <th class="text-right">Egységár</th>
+        <th class="text-right">Összeg</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="text-bold">Fejlesztési órák</td>
+        <td class="text-center">[X] óra</td>
+        <td class="text-right">[X] Ft / óra</td>
+        <td class="text-right">[X] Ft</td>
+      </tr>
+      <tr>
+        <td class="text-bold">Tanácsadási órák</td>
+        <td class="text-center">[X] óra</td>
+        <td class="text-right">[X] Ft / óra</td>
+        <td class="text-right">[X] Ft</td>
+      </tr>
+      <tr>
+        <td class="text-bold">Karbantartási órák</td>
+        <td class="text-center">[X] óra</td>
+        <td class="text-right">[X] Ft / óra</td>
+        <td class="text-right">[X] Ft</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- NOTES -->
+  <div class="doc-notes">
+    <div class="doc-notes-label">Megjegyzések</div>
+    <p>[Ide kerülnek az esetleges megjegyzések: különleges körülmények, függő feladatok, következő lépések, stb.]</p>
+  </div>
+
+  <hr class="doc-divider">
+
+  <!-- DECLARATION -->
+  <div class="doc-declaration">
+    <p>
+      A Szolgáltató kijelenti, hogy a fent felsorolt feladatokat a Szerződés és a Megrendelő igényei szerint, szakszerűen elvégezte. A Megrendelő aláírásával igazolja, hogy a teljesítést átvette, megvizsgálta, és elfogadja.
+    </p>
+    <p style="margin-top: 8px;">
+      A Megrendelő tudomásul veszi, hogy a Teljesítési Igazolás aláírásával a Szolgáltató teljesítése megtörténtnek minősül, és a számla kiállításának alapjául szolgál.
+    </p>
+  </div>
+
+  <!-- SIGNATURES -->
+  <div class="doc-signatures">
+    <div class="doc-signature-block">
+      <div class="doc-signature-label">Szolgáltató</div>
+      <div class="doc-signature-date">Dátum: ____________________</div>
+      <div class="doc-signature-line"></div>
+      <div class="doc-signature-name">[Ügyvezető neve]</div>
+      <div class="doc-signature-role">ügyvezető, BILDR HUB Kft.</div>
+    </div>
+    <div class="doc-signature-block">
+      <div class="doc-signature-label">Megrendelő</div>
+      <div class="doc-signature-date">Dátum: ____________________</div>
+      <div class="doc-signature-line"></div>
+      <div class="doc-signature-name">[Aláíró neve]</div>
+      <div class="doc-signature-role">[beosztás, cégnév]</div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="doc-footer">
+    <div class="doc-footer-links">
+      <a href="https://bildr.hu">bildr.hu</a>
+      <a href="mailto:ai@bildr.hu">ai@bildr.hu</a>
+    </div>
+    <div class="doc-footer-page">BILDR HUB Kft. - Teljesítési Igazolás</div>
+  </div>
+
+  <!-- PDF BUTTON -->
+  <div class="doc-pdf-btn-wrap">
+    <button class="doc-pdf-btn" onclick="window.print()">PDF LETÖLTÉS</button>
+  </div>
+
+</div>
+
+</body>
+</html>
+
