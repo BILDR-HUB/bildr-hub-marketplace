@@ -1,0 +1,8 @@
+{
+  "name": "react-patterns",
+  "description": "React frontend best practices — hooks ordering, state sync, optimistic UI, performance, and common pitfalls from production bugs.",
+  "author": {
+    "name": "bildr.hub",
+    "email": "hello@bildr.hu"
+  }
+}

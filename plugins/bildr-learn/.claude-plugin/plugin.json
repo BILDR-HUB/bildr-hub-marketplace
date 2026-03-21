@@ -1,0 +1,8 @@
+{
+  "name": "bildr-learn",
+  "description": "Manage the bildr.hub public knowledge base — create, update, and organize dev notes with consistent structure and formatting.",
+  "author": {
+    "name": "bildr.hub",
+    "email": "hello@bildr.hu"
+  }
+}

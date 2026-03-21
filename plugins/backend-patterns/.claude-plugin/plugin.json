@@ -1,0 +1,8 @@
+{
+  "name": "backend-patterns",
+  "description": "Backend best practices for Drizzle ORM, SQLite/D1, query optimization, tRPC, Hono, and Cloudflare Workers.",
+  "author": {
+    "name": "bildr.hub",
+    "email": "hello@bildr.hu"
+  }
+}
