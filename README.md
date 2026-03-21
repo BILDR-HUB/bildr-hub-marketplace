@@ -12,6 +12,7 @@ Curated Claude Code plugins by [bildr.hub](https://bildr.hu).
 | `security-review` | Security | API security checklist — IDOR, XSS, input validation, RLS, token flows |
 | `backend-patterns` | Backend | Drizzle ORM, SQLite/D1, query optimization, tRPC, Hono, CF Workers |
 | `react-patterns` | Frontend | Hooks ordering, state sync, optimistic UI, performance pitfalls |
+| `ui-ux-pro-max` | Design | **Manual only** — industry-specific design system generator (161 palettes, 57 fonts, 99 UX rules). Based on [nextlevelbuilder/ui-ux-pro-max-skill](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) |
 
 ## Installation
 
