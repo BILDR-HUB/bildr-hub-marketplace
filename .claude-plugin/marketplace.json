@@ -62,6 +62,15 @@
       "source": "./plugins/react-patterns",
       "category": "frontend",
       "tags": ["react", "hooks", "frontend", "performance", "ui"]
+    },
+    {
+      "name": "ui-ux-pro-max",
+      "description": "Manual-only — industry-specific design system generator with 161 color palettes, 57 font pairings, 99 UX guidelines, and searchable CSV databases. Based on nextlevelbuilder/ui-ux-pro-max-skill.",
+      "version": "1.0.0",
+      "author": { "name": "bildr.hub (based on nextlevelbuilder/ui-ux-pro-max-skill)" },
+      "source": "./plugins/ui-ux-pro-max",
+      "category": "design",
+      "tags": ["design", "ux", "design-system", "color", "typography", "accessibility"]
     }
   ]
 }
