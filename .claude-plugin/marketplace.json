@@ -6,7 +6,7 @@
   },
   "owner": {
     "name": "bildr.hub",
-    "email": "hello@bildr.hu"
+    "email": "ai@bildr.hu"
   },
   "plugins": [
     {
@@ -71,6 +71,15 @@
       "source": "./plugins/ui-ux-pro-max",
       "category": "design",
       "tags": ["design", "ux", "design-system", "color", "typography", "accessibility"]
+    },
+    {
+      "name": "uat-setup",
+      "description": "PostHog analytics and feedback widget integration for any frontend project. Detects framework (Next.js, React, Vue, Svelte, Angular), ORM/DB (Drizzle, Prisma), and color scheme automatically.",
+      "version": "1.0.0",
+      "author": { "name": "bildr.hub" },
+      "source": "./plugins/uat-setup",
+      "category": "productivity",
+      "tags": ["analytics", "posthog", "feedback", "widget", "setup"]
     }
   ]
 }
