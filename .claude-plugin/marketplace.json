@@ -37,13 +37,13 @@
       "tags": ["knowledge-base", "documentation", "notes"]
     },
     {
-      "name": "security-review",
-      "description": "Security review checklist for web APIs — IDOR, XSS, input validation, RLS, token flows, auth enforcement. Use when writing or reviewing API endpoints.",
-      "version": "1.0.0",
+      "name": "bildr-review",
+      "description": "BILDR security review — auth framework defaults, middleware auth enforcement, session management, IDOR, XSS, input validation, RLS, token flows.",
+      "version": "1.1.0",
       "author": { "name": "bildr.hub" },
-      "source": "./plugins/security-review",
+      "source": "./plugins/bildr-review",
       "category": "security",
-      "tags": ["security", "review", "api", "auth", "backend"]
+      "tags": ["security", "review", "api", "auth", "middleware", "backend"]
     },
     {
       "name": "backend-patterns",

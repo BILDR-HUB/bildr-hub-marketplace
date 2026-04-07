@@ -9,7 +9,7 @@ Curated Claude Code plugins by [bildr.hub](https://bildr.hu).
 | `frontend-design` | Design | Premium frontend interfaces with OKLCH colors, typography, theme archetypes, AI slop detection |
 | `bildr-hub-identity` | Design | bildr.hub brand identity — design system, document templates, tone guide |
 | `bildr-learn` | Productivity | bildr.hub public knowledge base management |
-| `security-review` | Security | API security checklist — IDOR, XSS, input validation, RLS, token flows |
+| `bildr-review` | Security | API security checklist — IDOR, XSS, input validation, RLS, token flows |
 | `backend-patterns` | Backend | Drizzle ORM, SQLite/D1, query optimization, tRPC, Hono, CF Workers |
 | `react-patterns` | Frontend | Hooks ordering, state sync, optimistic UI, performance pitfalls |
 | `ui-ux-pro-max` | Design | **Manual only** — industry-specific design system generator (161 palettes, 57 fonts, 99 UX rules). Based on [nextlevelbuilder/ui-ux-pro-max-skill](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) |
@@ -21,7 +21,7 @@ Curated Claude Code plugins by [bildr.hub](https://bildr.hu).
 /plugin marketplace add BILDR-HUB/bildr-hub-marketplace
 
 # Install individual plugins
-/plugin install security-review@bildr-hub-marketplace
+/plugin install bildr-review@bildr-hub-marketplace
 /plugin install backend-patterns@bildr-hub-marketplace
 /plugin install react-patterns@bildr-hub-marketplace
 ```
@@ -49,7 +49,7 @@ Third-party marketplaces have auto-update **disabled by default**. Users can ena
 
 Manual update:
 ```bash
-claude plugin update security-review@bildr-hub-marketplace
+claude plugin update bildr-review@bildr-hub-marketplace
 ```
 
 ## Contributing

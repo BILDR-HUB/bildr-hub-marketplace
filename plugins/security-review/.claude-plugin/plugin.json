@@ -1,8 +1,0 @@
-{
-  "name": "security-review",
-  "description": "Security review checklist for web APIs — IDOR, XSS, input validation, RLS, token flows, auth enforcement. Use when writing or reviewing API endpoints.",
-  "author": {
-    "name": "bildr.hub",
-    "email": "hello@bildr.hu"
-  }
-}

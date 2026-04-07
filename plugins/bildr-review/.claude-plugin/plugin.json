@@ -1,0 +1,8 @@
+{
+  "name": "bildr-review",
+  "description": "BILDR security review — auth framework defaults, middleware auth enforcement, session management, IDOR, XSS, input validation, RLS, token flows. Use when writing or reviewing API endpoints, auth flows, or middleware.",
+  "author": {
+    "name": "bildr.hub",
+    "email": "hello@bildr.hu"
+  }
+}

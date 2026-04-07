@@ -1,11 +1,11 @@
 ---
-name: security-review
-description: Security review checklist for web APIs — IDOR, XSS, input validation, RLS, token flows, auth enforcement. Use when writing or reviewing API endpoints, auth flows, file uploads, or any code handling user input.
+name: bildr-review
+description: BILDR security review — auth framework defaults, middleware auth enforcement, session management, IDOR, XSS, input validation, RLS, token flows. Use when writing or reviewing API endpoints, auth flows, middleware, or any code handling user input.
 ---
 
 ## Purpose
 
-This skill provides a security review checklist for web applications. It covers the most common vulnerabilities found in real production codebases: IDOR, XSS, input validation bypass, broken access control, token misuse, and more.
+Security review checklist for web applications, hardened with real incident learnings from BILDR projects. Covers auth framework pitfalls, middleware enforcement, session lifecycle, IDOR, XSS, input validation bypass, broken access control, and token misuse.
 
 Use this as a mental checklist when writing or reviewing API endpoints, middleware, auth flows, and frontend code that handles sensitive data.
 
@@ -13,14 +13,124 @@ Use this as a mental checklist when writing or reviewing API endpoints, middlewa
 
 - Writing or reviewing any API endpoint that accepts user input
 - Implementing auth flows (login, token, magic link, OTP)
+- Adding or modifying middleware
 - File upload endpoints
 - Role-based access control (RLS/RBAC)
 - Any mutation that changes ownership or state
 - Code review / PR review
+- Adding new user creation paths
 
 ---
 
-## 1 — API Input Validation (Trust Boundary)
+## 1 — Auth Framework Default Endpoints (CRITICAL)
+
+**Rule:** Auth frameworks (better-auth, NextAuth, Lucia, etc.) ship with default endpoints that may be enabled even when you think sign-up is disabled. ALWAYS audit the catch-all auth route.
+
+**Real incident:** `disableSignUp: true` on better-auth's emailOTP plugin only disabled OTP-based sign-up. The core `POST /api/auth/sign-up/email` (email+password) remained open. An attacker created a `member` account via this endpoint using a disposable email.
+
+```ts
+// ❌ BAD — only disables OTP sign-up, core sign-up still open
+plugins: [
+  emailOTP({ disableSignUp: true })
+]
+
+// ✅ GOOD — explicitly disable core email+password sign-up
+emailAndPassword: {
+  enabled: false,
+},
+plugins: [
+  emailOTP({ disableSignUp: true })
+]
+```
+
+**Checklist:**
+- [ ] Enumerate ALL endpoints the auth framework exposes (check docs for `/sign-up/*`, `/reset-password`, `/change-email`)
+- [ ] Explicitly disable every sign-up path you don't need
+- [ ] Check `defaultValue` on role fields — if sign-up is open, what role does the user get?
+- [ ] Test: `curl -X POST /api/auth/sign-up/email -d '{"email":"test@test.com","password":"x"}'` — should return 403/404, not 200
+
+---
+
+## 2 — Middleware-Level Auth Enforcement
+
+**Rule:** Auth checks MUST run in middleware (before rendering), not only in layouts or page components.
+
+**Problem:** Layout-level `getSessionUser()` → `redirect("/login")` runs DURING rendering, not before. CDN caching, edge cases with parallel routes, or CF Workers caching can bypass it.
+
+```ts
+// ✅ Middleware: check cookie PRESENCE (fast, pre-render gate)
+export function middleware(request: NextRequest) {
+  if (isPublicPath(pathname)) return NextResponse.next();
+
+  const hasSession = request.cookies.has("better-auth.session_token")
+    || request.cookies.has("__Secure-better-auth.session_token");
+
+  if (!hasSession) {
+    return NextResponse.redirect(new URL("/login", request.url));
+  }
+  return NextResponse.next();
+}
+
+// Layout: validate session against DB (defense-in-depth, second layer)
+// API route: requireAuth() per-endpoint (third layer)
+```
+
+**Defense-in-depth layers:**
+1. **Middleware** — cookie presence check (fast, runs BEFORE any rendering)
+2. **Layout** — DB session validation (catches fake/expired cookies)
+3. **API route** — `requireAuth()` per-endpoint (protects data access)
+
+**Checklist:**
+- [ ] Middleware exists for EVERY app (not just API CORS)
+- [ ] Middleware matcher covers all routes (not just `/api/*`)
+- [ ] Public paths explicitly whitelisted (not implicitly allowed)
+- [ ] Both dev and prod cookie names checked (`prefix.session_token` + `__Secure-prefix.session_token`)
+
+---
+
+## 3 — Session Invalidation on User Deletion
+
+**Rule:** When deleting a user, ALL their sessions MUST be deleted in the same transaction. Use cleanup that fails LOUD, not silent.
+
+```ts
+// ❌ BAD — silent catch hides session deletion failures
+const safe = (sql) => db.prepare(sql).bind(id).run().catch(console.warn);
+await safe("DELETE FROM sessions WHERE user_id = ?");
+
+// ✅ GOOD — explicit transaction, fail loud
+await db.batch([
+  db.prepare("DELETE FROM sessions WHERE user_id = ?").bind(id),
+  db.prepare("DELETE FROM accounts WHERE user_id = ?").bind(id),
+  db.prepare("DELETE FROM users WHERE id = ?").bind(id),
+]);
+```
+
+**Also check:**
+- [ ] Cookie cache (`cookieCache: { maxAge: 300 }`) — deleted user may access for up to maxAge seconds via cached session in cookie
+- [ ] If user can re-register via any open sign-up path after deletion
+
+---
+
+## 4 — Public Registration Endpoint Hardening
+
+**Rule:** Self-registration endpoints (portal invite, client sign-up) must verify the email belongs to the target organization.
+
+```ts
+// ❌ BAD — anyone who knows the company slug can register
+const company = await db.prepare("SELECT id FROM companies WHERE slug = ?")
+  .bind(slug).first();
+await db.prepare("INSERT INTO users ...").bind(email, company.id);
+
+// ✅ GOOD — email must exist in people table for this company
+const person = await db.prepare(
+  "SELECT id FROM people WHERE email = ? AND company_id = ?"
+).bind(email, company_id).first();
+if (!person) return Response.json({ error: "Not authorized" }, { status: 403 });
+```
+
+---
+
+## 5 — API Input Validation (Trust Boundary)
 
 **Rule:** Every POST/PATCH handler where body comes from `request.json()` must validate types explicitly.
 
@@ -38,7 +148,7 @@ if (body.aliases !== undefined && !Array.isArray(body.aliases))
 
 ---
 
-## 2 — IDOR Prevention (Nested Resource Ownership)
+## 6 — IDOR Prevention (Nested Resource Ownership)
 
 **Rule:** For nested routes `/api/parent/[id]/child/[childId]`, ALWAYS verify parent ownership in the WHERE clause.
 
@@ -55,7 +165,7 @@ db.update(child).set(updates)
 
 ---
 
-## 3 — Stored XSS Prevention (URL Scheme Validation)
+## 7 — Stored XSS Prevention (URL Scheme Validation)
 
 **Rule:** User-controlled URLs in `<a href=...>` must be scheme-whitelisted before rendering.
 
@@ -70,7 +180,7 @@ db.update(child).set(updates)
 
 ---
 
-## 4 — Search DoS Prevention
+## 8 — Search DoS Prevention
 
 **Rule:** Free-text search that hits LIKE/ILIKE + subqueries needs input length cap.
 
@@ -81,7 +191,7 @@ const search = rawSearch && rawSearch.length <= 200 ? rawSearch : null;
 
 ---
 
-## 5 — Server-Side File Validation (Magic Bytes)
+## 9 — Server-Side File Validation (Magic Bytes)
 
 **Rule:** `file.type` (multipart Content-Type) is client-controlled. Always verify magic bytes.
 
@@ -99,7 +209,7 @@ Also sanitize filenames: `file.name.replace(/[^a-zA-Z0-9._-]/g, "_")` — path t
 
 ---
 
-## 6 — Client-Supplied Enum Cross-Check
+## 10 — Client-Supplied Enum Cross-Check
 
 **Rule:** If an endpoint uses a client-supplied value for business logic (validation limits, routing), ALWAYS cross-check against the DB record.
 
@@ -113,7 +223,7 @@ Never use a client-supplied enum directly for limit/validation lookup.
 
 ---
 
-## 7 — Role-Based SELECT (Column Filtering)
+## 11 — Role-Based SELECT (Column Filtering)
 
 **Rule:** If a query result is for a non-admin role, ALWAYS use explicit column list.
 
@@ -134,7 +244,7 @@ const p = await db.select({
 
 ---
 
-## 8 — Backend RLS Enforcement (Coordinator/Scoped Roles)
+## 12 — Backend RLS Enforcement (Coordinator/Scoped Roles)
 
 **Rule:** If a role has restricted view (e.g., coordinator → own school only), the backend MUST enforce the filter. Frontend filtering is UX, not security.
 
@@ -153,7 +263,7 @@ async function enforceScope(user, inputScope?) {
 
 ---
 
-## 9 — Backend Boolean Enforcement
+## 13 — Backend Boolean Enforcement
 
 **Rule:** If a boolean field must be `true` (consent, ToS acceptance), the backend MUST verify. A disabled frontend button is UX, not security.
 
@@ -164,7 +274,7 @@ if (!data.consent_accepted)
 
 ---
 
-## 10 — Atomic Conditional UPDATE (TOCTOU Prevention)
+## 14 — Atomic Conditional UPDATE (TOCTOU Prevention)
 
 **Rule:** Don't SELECT→check→UPDATE. Put ownership + state conditions in the WHERE clause.
 
@@ -189,7 +299,7 @@ Generic error message prevents IDOR information disclosure.
 
 ---
 
-## 11 — Server-Side Soft-Delete Filtering
+## 15 — Server-Side Soft-Delete Filtering
 
 **Rule:** Soft-deleted records must be filtered in the DB query, never on the client.
 
@@ -204,7 +314,7 @@ Why: prevents bandwidth waste, stops other frontend logic from seeing deleted da
 
 ---
 
-## 12 — Token-Based Public Flows
+## 16 — Token-Based Public Flows
 
 See `reference/token-flows.md` for detailed patterns on:
 - `url_token` vs UUID PK (user-friendly URLs)
@@ -217,8 +327,24 @@ See `reference/token-flows.md` for detailed patterns on:
 
 ## Quick Checklist
 
-When reviewing an endpoint, ask:
+When reviewing an endpoint or auth flow, ask:
 
+**Auth framework:**
+- [ ] All default sign-up endpoints explicitly disabled?
+- [ ] Role `defaultValue` safe if sign-up is somehow open?
+- [ ] Auth catch-all route (`[...all]`) audited for exposed endpoints?
+
+**Middleware:**
+- [ ] Auth middleware exists for every app?
+- [ ] Middleware covers all routes, not just `/api/*`?
+- [ ] Public paths explicitly whitelisted?
+
+**Session lifecycle:**
+- [ ] User deletion also deletes all sessions (same transaction)?
+- [ ] Session cookie cache TTL is reasonable?
+- [ ] No open re-registration path after deletion?
+
+**API endpoints:**
 - [ ] Input types validated at boundary? (string, boolean, array)
 - [ ] Nested resource ownership checked in WHERE? (IDOR)
 - [ ] User-supplied URLs scheme-whitelisted? (XSS)
@@ -231,3 +357,8 @@ When reviewing an endpoint, ask:
 - [ ] Mutations use atomic conditional UPDATE? (TOCTOU)
 - [ ] Soft-deleted records filtered in query? (not client-side)
 - [ ] Tokens have expiry + one-time use where applicable?
+
+**Public registration:**
+- [ ] Self-registration requires email in org's people/contacts table?
+- [ ] Created users always get lowest-privilege role?
+- [ ] Email format validated server-side?
