@@ -1,8 +1,10 @@
 {
   "name": "uat-setup",
+  "version": "1.0.0",
   "description": "PostHog analytics and feedback widget integration for any frontend project. Detects framework (Next.js, React, Vue, Svelte, Angular), ORM/DB (Drizzle, Prisma), and color scheme automatically.",
   "author": {
     "name": "bildr.hub",
     "email": "ai@bildr.hu"
-  }
+  },
+  "skills": "./skills"
 }
