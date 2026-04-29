@@ -1,0 +1,6 @@
+{
+  "name": "bildr-offer",
+  "version": "1.0.0",
+  "author": { "name": "bildr.hub" },
+  "skills": "./skills"
+}

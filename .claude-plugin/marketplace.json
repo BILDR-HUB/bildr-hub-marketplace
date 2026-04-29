@@ -80,6 +80,42 @@
       "source": "./plugins/uat-setup",
       "category": "productivity",
       "tags": ["analytics", "posthog", "feedback", "widget", "setup"]
+    },
+    {
+      "name": "bildr-offer",
+      "description": "BILDR.HUB HTML árajánlat (proposal) generálása — multi-page A4 layout, warm brown palette, accept/reject callback flow, PDF export print-tel.",
+      "version": "1.0.0",
+      "author": { "name": "bildr.hub" },
+      "source": "./plugins/bildr-offer",
+      "category": "documents",
+      "tags": ["proposal", "offer", "quote", "a4", "html", "pdf", "documents"]
+    },
+    {
+      "name": "bildr-tig",
+      "description": "BILDR Teljesítési Igazolás (TIG) generálása egy oldalas A4 HTML-ben — Megrendelő/Vállalkozó kétoldalas aláírással, PDF export window.print()-tel.",
+      "version": "1.0.0",
+      "author": { "name": "bildr.hub" },
+      "source": "./plugins/bildr-tig",
+      "category": "documents",
+      "tags": ["tig", "performance-certificate", "completion", "a4", "html", "pdf", "documents"]
+    },
+    {
+      "name": "bildr-contract",
+      "description": "BILDR Vállalkozási Keretszerződés generálása DOCX formátumban saját bázis template alapján. WebSearch-csel kikeresi a hiányzó cégadatokat. Munkalapokhoz kapcsolódik.",
+      "version": "1.0.0",
+      "author": { "name": "bildr.hub" },
+      "source": "./plugins/bildr-contract",
+      "category": "documents",
+      "tags": ["contract", "framework-agreement", "docx", "documents", "legal"]
+    },
+    {
+      "name": "bildr-contractpage",
+      "description": "BILDR Munkalap (Contract Page) generálása DOCX formátumban a meglévő keretszerződéshez kapcsolódóan — feladatok, díjak, fizetési ütemezés, határidő.",
+      "version": "1.0.0",
+      "author": { "name": "bildr.hub" },
+      "source": "./plugins/bildr-contractpage",
+      "category": "documents",
+      "tags": ["contract", "work-order", "sow", "docx", "documents", "legal"]
     }
   ]
 }

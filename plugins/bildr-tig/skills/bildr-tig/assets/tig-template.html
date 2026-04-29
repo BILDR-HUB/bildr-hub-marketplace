@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BILDR.HUB - Teljesítési Igazolás - {{MUNKALAP_SZAM}}. {{ÜGYFÉL_NEV}}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bungee&family=JetBrains+Mono:wght@400;700&family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --color-text: #3d2814;
+      --color-text-2: #6b4423;
+      --color-text-3: #8b6144;
+      --color-accent: #a8763e;
+      --color-accent-dark: #7a5a2e;
+      --color-accent-light: #e8d5b8;
+      --color-border: #d4c5b5;
+      --color-border-light: #ece5dc;
+      --color-stripe: #fdfbf8;
+      --color-bg: #f5f0eb;
+      --font-display: "Bungee", sans-serif;
+      --font-body: "Plus Jakarta Sans", -apple-system, sans-serif;
+      --font-mono: "JetBrains Mono", "SF Mono", monospace;
+    }
+
+    html { font-size: 11.5px; }
+
+    body {
+      font-family: var(--font-body);
+      color: var(--color-text);
+      line-height: 1.6;
+      background: #e8e0d6;
+    }
+
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      margin: 20px auto;
+      padding: 22mm 22mm 24mm 22mm;
+      background: #fff;
+      box-shadow: 0 2px 16px rgba(61, 40, 20, 0.12);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .doc-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      padding-bottom: 16px;
+      margin-bottom: 32px;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .doc-header-brand {
+      font-family: var(--font-display);
+      font-size: 20px;
+      letter-spacing: 1px;
+    }
+    .doc-header-brand .accent { color: var(--color-accent); }
+    .doc-header-right {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--color-text-3);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .doc-title {
+      font-family: var(--font-display);
+      font-size: 28px;
+      text-transform: uppercase;
+      text-align: center;
+      letter-spacing: 2px;
+      margin-bottom: 6px;
+    }
+    .doc-subtitle {
+      text-align: center;
+      color: var(--color-text-3);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 36px;
+    }
+
+    .ref-block {
+      background: var(--color-stripe);
+      border: 1px solid var(--color-border-light);
+      border-left: 3px solid var(--color-accent);
+      padding: 16px 20px;
+      margin-bottom: 28px;
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 8px 16px;
+      font-size: 13px;
+    }
+    .ref-block .label {
+      font-weight: 600;
+      color: var(--color-text-2);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      align-self: center;
+    }
+    .ref-block .value { color: var(--color-text); }
+
+    .parties {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+    .party {
+      border: 1px solid var(--color-border);
+      padding: 18px 20px;
+      background: var(--color-stripe);
+    }
+    .party-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--color-accent-dark);
+      margin-bottom: 8px;
+    }
+    .party-name {
+      font-weight: 700;
+      font-size: 15px;
+      margin-bottom: 8px;
+    }
+    .party-details {
+      font-size: 12px;
+      color: var(--color-text-2);
+      line-height: 1.6;
+    }
+
+    .section {
+      margin-bottom: 28px;
+    }
+    .section-title {
+      font-family: var(--font-display);
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--color-text);
+      border-left: 3px solid var(--color-accent);
+      padding-left: 10px;
+      margin-bottom: 12px;
+    }
+    .section-body { font-size: 13px; line-height: 1.7; }
+    .section-body ul {
+      list-style: none;
+      padding-left: 0;
+    }
+    .section-body ul li {
+      position: relative;
+      padding-left: 20px;
+      margin-bottom: 6px;
+    }
+    .section-body ul li::before {
+      content: "";
+      position: absolute;
+      left: 4px;
+      top: 8px;
+      width: 6px;
+      height: 6px;
+      background: var(--color-accent);
+      border-radius: 50%;
+    }
+
+    .fee-box {
+      background: var(--color-accent-light);
+      border: 1px solid var(--color-accent);
+      padding: 14px 20px;
+      margin-top: 12px;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 6px 16px;
+      font-size: 13px;
+    }
+    .fee-box .label {
+      font-weight: 600;
+      color: var(--color-accent-dark);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      text-transform: uppercase;
+    }
+    .fee-box .value {
+      text-align: right;
+      font-family: var(--font-mono);
+      font-weight: 700;
+    }
+    .fee-box .total {
+      border-top: 1px solid var(--color-accent);
+      padding-top: 6px;
+      margin-top: 4px;
+      font-size: 16px;
+      color: var(--color-text);
+    }
+
+    .clause {
+      background: var(--color-stripe);
+      border: 1px dashed var(--color-border);
+      padding: 14px 18px;
+      font-size: 12px;
+      line-height: 1.6;
+      color: var(--color-text-2);
+      margin-bottom: 32px;
+    }
+
+    .signatures {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      margin-top: auto;
+      padding-top: 32px;
+    }
+    .signature {
+      text-align: center;
+    }
+    .signature-line {
+      border-bottom: 1.5px solid var(--color-text);
+      height: 60px;
+      margin-bottom: 8px;
+    }
+    .signature-name {
+      font-weight: 700;
+      font-size: 13px;
+    }
+    .signature-role {
+      font-size: 11px;
+      color: var(--color-text-3);
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .signature-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--color-accent-dark);
+      margin-bottom: 18px;
+    }
+
+    .doc-footer {
+      margin-top: 24px;
+      padding-top: 14px;
+      border-top: 1px solid var(--color-border-light);
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      color: var(--color-text-3);
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    @media print {
+      body { background: #fff; }
+      .page {
+        box-shadow: none;
+        margin: 0;
+        page-break-after: always;
+      }
+      @page { size: A4; margin: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="doc-header">
+      <span class="doc-header-brand">BILDR<span class="accent">.HUB</span></span>
+      <div class="doc-header-right">TIG — {{MUNKALAP_SZAM}}. munkalap</div>
+    </div>
+
+    <h1 class="doc-title">Teljesítési Igazolás</h1>
+    <div class="doc-subtitle">Vállalkozási Keretszerződés alapján</div>
+
+    <div class="ref-block">
+      <div class="label">Keretszerződés dátuma</div>
+      <div class="value">{{KERETSZERZODES_DATUM}}</div>
+      <div class="label">Munkalap</div>
+      <div class="value">{{MUNKALAP_SZAM}}. sz. Munkalap — {{MUNKALAP_CIM}}</div>
+      <div class="label">Teljesítés időszaka</div>
+      <div class="value">{{TELJESITES_IDOSZAK}}</div>
+      <div class="label">Teljesítés dátuma</div>
+      <div class="value">{{TELJESITES_DATUM}}</div>
+    </div>
+
+    <div class="parties">
+      <div class="party">
+        <div class="party-label">Megrendelő</div>
+        <div class="party-name">{{MEGRENDELO_CEGNEV}}</div>
+        <div class="party-details">
+          Székhely: {{MEGRENDELO_SZEKHELY}}<br>
+          Adószám: {{MEGRENDELO_ADOSZAM}}<br>
+          Képviseli: {{MEGRENDELO_KEPVISELO}}
+        </div>
+      </div>
+      <div class="party">
+        <div class="party-label">Vállalkozó</div>
+        <div class="party-name">BILDR HUB Kft.</div>
+        <div class="party-details">
+          Székhely: 1052 Budapest, Károly körút 10. 2. em. 3B.<br>
+          Adószám: 33011387-2-41<br>
+          Képviseli: Kovács Bence, ügyvezető
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Igazolt teljesítés</div>
+      <div class="section-body">
+        <p style="margin-bottom: 10px;">A Vállalkozó az alábbi feladatokat teljesítette:</p>
+        <ul>
+          {{FELADATOK_LISTA}}
+        </ul>
+        <div class="fee-box">
+          <div class="label">Vállalkozói díj (nettó)</div>
+          <div class="value">{{DIJ_NETTO}}</div>
+          <div class="label">ÁFA (27%)</div>
+          <div class="value">{{DIJ_AFA}}</div>
+          <div class="label total">Bruttó összeg</div>
+          <div class="value total">{{DIJ_BRUTTO}}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="clause">
+      A Megrendelő a fent felsorolt feladatokat mennyiségi és minőségi szempontból átvizsgálta, és azokat a Vállalkozási Keretszerződés és a {{MUNKALAP_SZAM}}. sz. Munkalap rendelkezéseinek megfelelően teljesítettnek minősíti. A jelen Teljesítési Igazolás aláírásával a Megrendelő hozzájárul a feladatra vonatkozó számla kiállításához. Fizetési határidő: a számla kézhezvételétől számított 8 munkanap.
+    </div>
+
+    <div class="signatures">
+      <div class="signature">
+        <div class="signature-label">Megrendelő</div>
+        <div class="signature-line"></div>
+        <div class="signature-name">{{MEGRENDELO_CEGNEV}}</div>
+        <div class="signature-role">képv.: {{MEGRENDELO_KEPVISELO}}</div>
+      </div>
+      <div class="signature">
+        <div class="signature-label">Vállalkozó</div>
+        <div class="signature-line"></div>
+        <div class="signature-name">BILDR HUB Kft.</div>
+        <div class="signature-role">képv.: Kovács Bence, ügyvezető</div>
+      </div>
+    </div>
+
+    <div class="doc-footer">
+      <div>{{ALAIRAS_HELYE}}, {{ALAIRAS_DATUMA}}</div>
+      <div>bildr.hu · ai@bildr.hu</div>
+    </div>
+  </div>
+</body>
+</html>
