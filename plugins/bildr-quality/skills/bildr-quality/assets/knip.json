@@ -1,0 +1,25 @@
+{
+  "$schema": "https://unpkg.com/knip@5/schema.json",
+  "entry": [
+    "src/index.{ts,tsx}",
+    "src/main.{ts,tsx}",
+    "src/server/index.{ts,tsx}",
+    "src/client/main.{ts,tsx}",
+    "src/client/App.{ts,tsx}",
+    "vite.config.ts",
+    "wrangler.toml",
+    "wrangler.jsonc",
+    "drizzle.config.ts"
+  ],
+  "project": ["src/**/*.{ts,tsx}"],
+  "ignore": [
+    "**/*.test.{ts,tsx}",
+    "**/*.spec.{ts,tsx}",
+    "**/__tests__/**",
+    "**/test-fixtures/**",
+    "scripts/**",
+    "drizzle/**"
+  ],
+  "ignoreDependencies": [],
+  "ignoreExportsUsedInFile": true
+}

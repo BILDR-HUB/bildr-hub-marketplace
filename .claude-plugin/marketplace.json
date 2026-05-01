@@ -82,6 +82,15 @@
       "tags": ["analytics", "posthog", "feedback", "widget", "setup"]
     },
     {
+      "name": "bildr-quality",
+      "description": "Code quality bootstrap for any TypeScript project — ESLint 9 flat config + Prettier + husky + lint-staged + knip. Detects framework (Next.js, CF Workers, Vite, generic) and package manager (npm, pnpm, yarn, bun), measures baseline (lint warnings, dead code, circular deps), updates project CLAUDE.md, and offers opt-in strict-type-checked mode.",
+      "version": "1.0.0",
+      "author": { "name": "bildr.hub" },
+      "source": "./plugins/bildr-quality",
+      "category": "productivity",
+      "tags": ["eslint", "prettier", "husky", "lint-staged", "knip", "code-quality", "setup", "typescript"]
+    },
+    {
       "name": "bildr-offer",
       "description": "BILDR.HUB HTML árajánlat (proposal) generálása — multi-page A4 layout, warm brown palette, accept/reject callback flow, PDF export print-tel.",
       "version": "1.0.0",

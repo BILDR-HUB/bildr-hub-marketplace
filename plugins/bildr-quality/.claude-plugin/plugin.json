@@ -1,0 +1,10 @@
+{
+  "name": "bildr-quality",
+  "version": "1.0.0",
+  "description": "Code quality bootstrap for any TypeScript project — ESLint 9 flat config + Prettier + husky + lint-staged + knip. Detects framework (Next.js, CF Workers, Vite, generic), is idempotent, measures baseline, and offers opt-in strict-type-checked mode.",
+  "author": {
+    "name": "bildr.hub",
+    "email": "ai@bildr.hu"
+  },
+  "skills": "./skills"
+}
