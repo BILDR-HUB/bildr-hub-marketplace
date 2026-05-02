@@ -140,12 +140,50 @@ bun add -d eslint@^9 @eslint/js typescript-eslint \
 
 A bundled configok ennek a SKILL.md fájlnak az `assets/` mappájában vannak. Másold át őket a projekt rootba (a 3. lépésnél tisztáztuk hogy felül lehet írni):
 
+### 7a. Általános configok (mindig)
+
 - `assets/eslint.config.js` → `./eslint.config.js`
 - `assets/prettier.config.js` → `./prettier.config.js`
 - `assets/lint-staged.config.js` → `./lint-staged.config.js`
-- `assets/knip.json` → `./knip.json`
 
 > **Megjegyzés**: a bundled `eslint.config.js` `import.meta.dirname`-et használ amikor a `BILDR_STRICT=1` mód aktív. Ez Node 20.11+ kell. Ha a projekt régebbi Node-ot használ (`engines.node` mezőt nézd meg), figyelmeztesd a user-t.
+
+### 7b. Framework-specifikus knip config
+
+A `knip.json` (dead code detection) projekt-layout-függő. **Ne** másold a generikus `knip.json`-t Next.js App Router projektbe — a `app/` mappát nem látja, és hamis "0 unused" baseline-t fog mutatni.
+
+A 2. lépésben detektált projekt típus alapján válaszd a megfelelő bundled configot:
+
+| Projekt típus | Másolandó fájl |
+|---|---|
+| Next.js App Router (`app/` dir van) | `assets/knip-nextjs-app.json` → `./knip.json` |
+| Next.js Pages Router (`pages/` dir van) | `assets/knip-nextjs-pages.json` → `./knip.json` |
+| Vite (React/Vue, `vite.config.*`) | `assets/knip-vite.json` → `./knip.json` |
+| CF Workers (`wrangler.*`) | `assets/knip-workers.json` → `./knip.json` |
+| Generic / nem detektált | `assets/knip.json` → `./knip.json` + figyelmeztesd a user-t hogy customize-olnia kell az `entry` és `project` mezőket |
+
+> **Fontos**: a knip alapból nem hibázik amikor az `entry` glob 0 fájlt match-el — csak hamis "all clean" eredményt ad. A baseline lépésben (10. lépés) jelentsd a user-nek hány fájlt látott a knip ténylegesen, így észrevehető a misconfig.
+
+### 7c. CF Workers ESLint globals override
+
+A bundled `eslint.config.js` `globals.node`-ot használ default-ként. Workers projektben ez **nem ideális** — Workers V8 isolate-on fut, nem Node-on, és a `setImmediate`/`__dirname`/stb. globalokat nem szabadna szabadon megengedni.
+
+Ha **Workers** projekt detektálva (`wrangler.*` exists):
+
+1. Olvasd be a most átmásolt `eslint.config.js`-t
+2. A `globals.node` sort cseréld le `globals.serviceWorker`-re a `languageOptions.globals` blokkban:
+   ```diff
+   globals: {
+     ...globals.browser,
+   - ...globals.node,
+   + ...globals.serviceWorker,
+   },
+   ```
+3. Kérdezd meg a user-t: **"Használsz `nodejs_compat` flag-et a `wrangler.toml`-ban (azaz `process.env`, `Buffer`, stb. Node API-kat hívsz a kódban)? Ha igen, hagyjam meg a `globals.node`-ot is."**
+   - Ha igen → mindkettőt rakd be (`...globals.serviceWorker, ...globals.node`)
+   - Ha nem → csak `serviceWorker` marad
+
+> **Miért**: A `globals.browser` lefedi a fetch/Response/Request/URL/crypto.subtle Web Standard API-kat (Workers-en is futnak). A `globals.serviceWorker` extra Worker-specifikus globals-okat ad (pl. `addEventListener`, `caches`). A `globals.node` viszont (`process`, `Buffer`, `__dirname`, `setImmediate`) Workers-en csak `nodejs_compat` flag-gel működik — alapból tiltani kell hogy a lint elkapjon hibás használatot.
 
 ## 8. lépés — Husky pre-commit hook
 

@@ -1,0 +1,35 @@
+{
+  "$schema": "https://unpkg.com/knip@5/schema.json",
+  "entry": [
+    "app/**/page.{ts,tsx}",
+    "app/**/layout.{ts,tsx}",
+    "app/**/route.{ts,tsx}",
+    "app/**/loading.{ts,tsx}",
+    "app/**/error.{ts,tsx}",
+    "app/**/not-found.{ts,tsx}",
+    "app/**/template.{ts,tsx}",
+    "app/**/default.{ts,tsx}",
+    "app/**/{global-error,not-found}.{ts,tsx}",
+    "middleware.{ts,tsx}",
+    "next.config.{js,ts,mjs}",
+    "instrumentation.{ts,tsx}",
+    "drizzle.config.{ts,js}"
+  ],
+  "project": [
+    "app/**/*.{ts,tsx}",
+    "components/**/*.{ts,tsx}",
+    "lib/**/*.{ts,tsx}",
+    "hooks/**/*.{ts,tsx}",
+    "utils/**/*.{ts,tsx}",
+    "src/**/*.{ts,tsx}"
+  ],
+  "ignore": [
+    "**/*.test.{ts,tsx}",
+    "**/*.spec.{ts,tsx}",
+    "**/__tests__/**",
+    "**/test-fixtures/**",
+    "drizzle/**"
+  ],
+  "ignoreDependencies": [],
+  "ignoreExportsUsedInFile": true
+}
